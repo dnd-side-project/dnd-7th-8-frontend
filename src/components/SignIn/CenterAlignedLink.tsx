@@ -13,7 +13,7 @@ const CenterAlignedLink: any = (props: any) => {
 export default CenterAlignedLink;
 
 const Aligner = styled.div`
-    margin-top: 1rem;
+    margin-top: 3rem;
     text-align: center;
 
     font-size: 0.8rem;
@@ -22,6 +22,8 @@ const Aligner = styled.div`
 const StyledLink = styled(Link)`
     color: black;
     font-weight: bold;
+    text-decoration: underline;
+
     &:hover {
         color: gray;
     }

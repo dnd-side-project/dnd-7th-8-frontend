@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const AuthButton: any = (props: any) => {
@@ -8,7 +8,7 @@ const AuthButton: any = (props: any) => {
 export default AuthButton;
 
 const Wrapper = styled.div`
-    margin-top: 4rem;
+    margin-top: 3rem;
     padding: 0.8rem 0.5rem;
     width: 100%;
 
