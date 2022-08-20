@@ -1,12 +1,13 @@
-import { Box, Image, Flex, Badge, Text, Button, LinkBox, LinkOverlay, useToast } from "@chakra-ui/react";
+import { Box, Image, Flex, Link, Text, Button, LinkBox, LinkOverlay, useToast } from "@chakra-ui/react";
 import Rating from "@material-ui/lab/Rating";
-import { useContext } from "react";
-import { BsFillHeartFill as FillHeart } from "react-icons/bs";
-import { BsHeart as NoFillHeart } from "react-icons/bs";
+import { useContext, useState } from "react";
+import { BsFillStarFill } from "react-icons/bs";
 import { Link as RouterLink } from "react-router-dom";
 import { GlobalContext, ProductType } from "./context/GlobalState";
-import gradientImg from "../../assets/img/grey-gradient.png";
+import NoFillHeart from "../../assets/img/notFillIcon.png";
+import BsFillHeartFill from "../../assets/img/fillIcon.png";
 import styled from "styled-components";
+import ProductModal from "../../pages/ProductPage";
 
 type Props = {
     product: ProductType;
@@ -16,94 +17,100 @@ type Props = {
 const ProductCard = ({ product }: Props) => {
     const { addToCart, toggleSaved } = useContext(GlobalContext);
     const toast = useToast();
+    const [isOpen, setOpen] = useState(false);
+
+    const handleClick = () => {
+        // 여기서 열어준다
+        setOpen(true);
+    };
+
+    const handleModalSubmit = () => {
+        // 모달1 비지니스 로직
+        setOpen(false);
+    };
+    const handleModalCancel = () => setOpen(false);
     return (
-        <Flex
-            as={LinkBox}
-            style={{ borderRadius: "10px" }}
-            direction="column"
-            className="product-card"
-            h="430px"
-            w="100%"
-            maxW="320px"
-            border={["1px solid", "none"]}
-            borderColor={["gray.200", "transparent"]}
-            _hover={{
-                ".product-title": {
-                    color: "appBlue.600",
-                },
-            }}
-            transition="all 0.2s ease"
-        >
-            {/* <LinkOverlay as={RouterLink} to={{ pathname: `/products/${product.id}` }} className="product-title">
-                <Flex direction="column" minH="84px" justify="flex-start">
-                    <Text mt={2} fontSize="sm" fontWeight="semibold" lineHeight="short">
-                        {product.title}
-                    </Text>
-                </Flex>
-            </LinkOverlay> */}
-            <Box>
-                <Flex
-                    style={{
-                        borderRadius: "10px",
-                        backgroundImage:
-                            "linear-gradient(to top, rgba(232, 232, 232, 0.1) 80%, rgba(20, 20, 20, 0.3) 98%)",
-                        backgroundSize: "cover",
-                        backgroundPosition: "top",
-                    }}
-                >
-                    <Image
-                        src={product.imageUrl}
-                        alt={product.imageAlt}
+        <>
+            <Flex
+                boxShadow="xl"
+                mb={8}
+                as={LinkBox}
+                style={{ borderRadius: "10px" }}
+                className="product-card"
+                h="350px"
+                maxW="240px"
+                transition="all 0.2s ease"
+            >
+                <Box onClick={handleClick}>
+                    <Flex
                         style={{
-                            position: "relative",
-                            width: "100%",
-                            height: "350px",
-                            zIndex: "-1",
-                            objectFit: "cover",
-                            borderRadius: "10px 10px 0 0",
+                            borderRadius: "10px",
+                            backgroundImage:
+                                "linear-gradient(to top, rgba(232, 232, 232, 0.1) 80%, rgba(20, 20, 20, 0.3) 98%)",
+                            backgroundSize: "cover",
+                            backgroundPosition: "top",
                         }}
-                    />
-                    <CoverContent>
-                        <Text>{product.title}</Text>
-                    </CoverContent>
-                </Flex>
-                <Flex mt={2} align="center" justify="space-between" flexWrap="wrap">
-                    <Flex align="center">
-                        <Rating name="read-only-stars" value={product.rating} precision={0.1} size="small" readOnly />
-                        <Text ml={1} fontSize="sm">
-                            {product.rating}
-                        </Text>
-                        <Button
-                            leftIcon={product.isSaved ? <FillHeart /> : <NoFillHeart />}
-                            colorScheme="appBlue"
-                            variant={product.isSaved ? "fill" : "heaa"}
-                            height={7}
-                            minW={7}
-                            fontSize="sm"
-                            px={2}
-                            py={3}
-                            onClick={() => {
-                                toast({
-                                    title: product.isSaved
-                                        ? "Product successfully removed from your saved items"
-                                        : "Product successfully added to your saved items",
-                                    status: "success",
-                                    duration: 1500,
-                                    isClosable: true,
-                                });
-                                toggleSaved(product.id);
+                    >
+                        <Image
+                            src={product.imageUrl}
+                            alt={product.imageAlt}
+                            style={{
+                                position: "relative",
+                                height: "300px",
+                                zIndex: "-1",
+                                objectFit: "cover",
+                                borderRadius: "10px 10px 0 0",
                             }}
                         />
+                        <CoverContent>
+                            <Text style={{ fontSize: "18px", color: "white" }}>{product.title}</Text>
+                            <Button
+                                leftIcon={product.isSaved ? <img src={BsFillHeartFill} /> : <img src={NoFillHeart} />}
+                                variant={product.isSaved ? "fill" : "heaa"}
+                                height={7}
+                                minW={7}
+                                fontSize="sm"
+                                px={2}
+                                py={3}
+                                onClick={() => {
+                                    toast({
+                                        title: product.isSaved
+                                            ? "Product successfully removed from your saved items"
+                                            : "Product successfully added to your saved items",
+                                        status: "success",
+                                        duration: 1500,
+                                        isClosable: true,
+                                    });
+                                    toggleSaved(product.id);
+                                }}
+                            />
+                        </CoverContent>
                     </Flex>
-                </Flex>
-            </Box>
-        </Flex>
+                    <Flex mt={2} align="center" justify="space-between" flexWrap="wrap">
+                        <Flex align="center" pl={4} pt={1}>
+                            {/* <Rating name="read-only-stars" precision={0.1} size="small" readOnly /> */}
+                            <BsFillStarFill style={{ width: "15px", color: "#FB5C00" }} />
+                            <Text ml={1} fontSize="md" style={{ fontWeight: "900", color: "#FB5C00" }}>
+                                {product.rating}
+                            </Text>
+                        </Flex>
+                    </Flex>
+                </Box>
+                <ProductModal isOpen={isOpen} onSubmit={handleModalSubmit} onCancel={handleModalCancel} />
+            </Flex>
+        </>
     );
 };
 
 export default ProductCard;
 
 const CoverContent = styled.div`
+    padding: 10px;
+    width: 160%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     position: absolute;
     top: 0.5rem;
     left: 5%;

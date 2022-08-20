@@ -1,4 +1,4 @@
-import { Box, Button, chakra, Flex, Heading, HStack, Avatar, Link, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, chakra, Flex, Heading, HStack, Text, Link, useDisclosure } from "@chakra-ui/react";
 import { FaShoppingCart } from "react-icons/fa";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { Link as RouterLink, Route, useLocation } from "react-router-dom";
@@ -19,19 +19,18 @@ const Header = () => {
             as="header"
             direction="column"
             height={["120px", "fit-content"]}
-            px={[3, null]}
             position="fixed"
             top={0}
             zIndex={10}
             w="100%"
             bg="white"
             boxShadow="base"
+            style={{ padding: "0% 10%" }}
         >
             <Flex height="65px" px={[null, 2]} py={[7, 9]} justify={["space-between", null]}>
                 <Flex align="center">
                     <HamburgerIcon
                         display={["inline-block", "none"]}
-                        color="appBlue.500"
                         w="1.5rem"
                         h="1.5rem"
                         mr={4}
@@ -48,43 +47,82 @@ const Header = () => {
                 </Flex>
                 <Flex justify="space-between" align="center">
                     <HStack spacing={[3, 5]}>
-                        <Link
-                            as={RouterLink}
-                            to={location.pathname === "/login" ? "/register" : "/login"}
-                            _hover={{ textDecoration: "none" }}
-                        >
+                        <Link as={RouterLink} to="/" _hover={{ textDecoration: "none" }}>
+                            <Button
+                                pr={1}
+                                fontSize={"sm"}
+                                color="#000000"
+                                bg="none"
+                                _hover={{
+                                    color: "#FB5C00",
+                                }}
+                                _focus={{ color: "#FB5C00" }}
+                            >
+                                홈
+                            </Button>
+                        </Link>
+                        <Link as={RouterLink} to="/" _hover={{ textDecoration: "none" }}>
+                            <Button
+                                pr={1}
+                                fontSize={"sm"}
+                                color="#000000"
+                                bg="none"
+                                _hover={{
+                                    color: "#FB5C00",
+                                }}
+                                _focus={{ color: "#FB5C00" }}
+                            >
+                                조합 레시피
+                            </Button>
+                        </Link>
+                        <Link as={RouterLink} to="/drink" _hover={{ textDecoration: "none" }}>
+                            <Button
+                                pr={5}
+                                fontSize={"sm"}
+                                color="#000000"
+                                bg="none"
+                                _hover={{
+                                    color: "#FB5C00",
+                                }}
+                                _focus={{ color: "#FB5C00" }}
+                            >
+                                음료냉장고
+                            </Button>
+                        </Link>
+                        <Text style={{ marginRight: "20px" }}>|</Text>
+                    </HStack>
+                    <HStack spacing={[3, 5]}>
+                        <Link as={RouterLink} to="/" _hover={{ textDecoration: "none" }}>
+                            <Button
+                                px={5}
+                                fontSize={"sm"}
+                                color="#000000"
+                                bg="none"
+                                _hover={{
+                                    color: "#FB5C00",
+                                }}
+                            >
+                                로그인
+                            </Button>
+                        </Link>
+                        <Link as={RouterLink} to="/" _hover={{ textDecoration: "none" }}>
                             <Button
                                 height={[8, 9]}
                                 minW={[8, 9]}
-                                fontSize={["sm", "md"]}
+                                px={5}
+                                fontSize={"sm"}
                                 variant="outline"
-                                borderColor="appBlue.400"
+                                borderColor="#FB5C00"
                                 borderRadius="0.3rem"
-                                color="appBlue.400"
+                                color="#FB5C00"
                                 _hover={{
-                                    bg: "appBlue.400",
-                                    color: "white",
-                                }}
-                                _active={{
-                                    bg: "appBlue.500",
+                                    bg: "#FB5C00",
                                     color: "white",
                                 }}
                             >
-                                {location.pathname === "/login" ? "Sign Up" : "Sign In"}
+                                회원가입
                             </Button>
                         </Link>
-                        <Box mr={location.pathname === "/login" || location.pathname === "/register" ? 2 : undefined}>
-                            <Link as={RouterLink} to="/cart" _hover={{ textDecoration: "none" }}>
-                                <ShoppingCart
-                                    height={{ base: 25, smallTablet: 27, sm: 30 }}
-                                    width={{ base: 25, smallTablet: 27, sm: 30 }}
-                                    color="gray.400"
-                                    cursor="pointer"
-                                    _hover={{ color: "appBlue.300" }}
-                                    _active={{ color: "appBlue.400" }}
-                                />
-                            </Link>
-                        </Box>
                     </HStack>
                 </Flex>
             </Flex>

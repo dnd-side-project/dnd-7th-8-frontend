@@ -26,8 +26,8 @@ const SearchBar = ({ display }: Props) => {
                     borderRadius="full"
                     bg="blackAlpha.200"
                     _focus={{
-                        borderColor: "appBlue.400",
-                        boxShadow: "0 0 0 1px #3564e6",
+                        borderColor: "#FB5C00",
+                        boxShadow: "0 0 0 1px #FB5C00",
                     }}
                     placeholder="찾는 레시피나 음료가 있으신가요?"
                     fontSize={["xs"]}
@@ -40,12 +40,7 @@ const SearchBar = ({ display }: Props) => {
                 <InputRightElement
                     children={
                         value && (
-                            <CloseIcon
-                                color="appBlue.400"
-                                fontSize={12}
-                                cursor="pointer"
-                                onClick={() => setValue("")}
-                            />
+                            <CloseIcon color="#FB5C00" fontSize={12} cursor="pointer" onClick={() => setValue("")} />
                         )
                     }
                 />

@@ -6,6 +6,7 @@ import { GlobalContext } from "../components/Drink/context/GlobalState";
 import Container from "../components/Drink/Container";
 import loadableVisibility from "react-loadable-visibility/loadable-components";
 import LoadingProduct from "../components/Drink/LoadingProduct";
+import Header from "../components/Nav/Header";
 
 const ProductCard = loadableVisibility(() => import("../components/Drink/ProductCard"), {
     fallback: <LoadingProduct />,
@@ -21,40 +22,44 @@ const SearchResults = () => {
             (product.shortDescription && product.shortDescription.toLowerCase().includes(name.toLowerCase())),
     );
     return (
-        <Container>
-            <Box p={3}>
-                <Breadcrumb
-                    fontSize="sm"
-                    spacing="8px"
-                    mb={6}
-                    color="gray.500"
-                    separator={<ChevronRightIcon color="gray.500" />}
-                >
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href="#">Home</BreadcrumbLink>
-                    </BreadcrumbItem>
+        <>
+            {" "}
+            <Header />
+            <Container>
+                <Box p={3}>
+                    <Breadcrumb
+                        fontSize="sm"
+                        spacing="8px"
+                        mb={6}
+                        color="gray.500"
+                        separator={<ChevronRightIcon color="gray.500" />}
+                    >
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href="#">Home</BreadcrumbLink>
+                        </BreadcrumbItem>
 
-                    <BreadcrumbItem isCurrentPage>
-                        <BreadcrumbLink href="#">Product</BreadcrumbLink>
-                    </BreadcrumbItem>
-                </Breadcrumb>
-                <Grid
-                    p={3}
-                    templateColumns="repeat(auto-fit, minmax(240px, 1fr))"
-                    gap={3}
-                    placeItems="center"
-                    placeContent="center"
-                >
-                    {foundProducts.length > 0 ? (
-                        foundProducts.map((product) => (
-                            <ProductCard key={product.id} product={product} className="loading-product" />
-                        ))
-                    ) : (
-                        <Text>No products found</Text>
-                    )}
-                </Grid>
-            </Box>
-        </Container>
+                        <BreadcrumbItem isCurrentPage>
+                            <BreadcrumbLink href="#">Product</BreadcrumbLink>
+                        </BreadcrumbItem>
+                    </Breadcrumb>
+                    <Grid
+                        p={3}
+                        templateColumns="repeat(auto-fit, minmax(240px, 1fr))"
+                        gap={3}
+                        placeItems="center"
+                        placeContent="center"
+                    >
+                        {foundProducts.length > 0 ? (
+                            foundProducts.map((product) => (
+                                <ProductCard key={product.id} product={product} className="loading-product" />
+                            ))
+                        ) : (
+                            <Text>No products found</Text>
+                        )}
+                    </Grid>
+                </Box>
+            </Container>
+        </>
     );
 };
 

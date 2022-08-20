@@ -8,6 +8,7 @@ const styles = {
             margin: "0",
             padding: "0",
             WebkitTapHighlightColor: "transparent",
+            fontFamily: "SUIT-Variable",
         },
         // styles for the `html` and `body`
         "html,body": {
@@ -15,7 +16,7 @@ const styles = {
         },
         // Shopping Cart Badge styles
         ".MuiBadge-root > span": {
-            fontFamily: "'Quicksand', sans-serif",
+            fontFamily: "SUIT-Variable",
             bg: "#fa5757",
             height: "17px",
             minWidth: "17px",
