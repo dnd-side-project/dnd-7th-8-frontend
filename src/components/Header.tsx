@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/images/logo.png";
 
@@ -6,6 +7,7 @@ const HeaderContainer = styled.div`
     display: flex;
     flex-direction: row;
     margin-top: 20px;
+    margin-bottom: 60px;
 `;
 
 const LogoImg = styled.img`
@@ -16,7 +18,11 @@ const LogoImg = styled.img`
 const Header = () => {
     return (
         <HeaderContainer>
-            <LogoImg src={logo} />
+            <div>
+                <Link to="/">
+                    <LogoImg src={logo} />
+                </Link>
+            </div>
         </HeaderContainer>
     );
 };

@@ -20,7 +20,7 @@ const SubMenu = styled.div`
     margin: 20px;
 `;
 
-const CustomCheckbox = styled.input`
+export const CustomCheckbox = styled.input`
     width: 18px;
     height: 18px;
     &:checked {

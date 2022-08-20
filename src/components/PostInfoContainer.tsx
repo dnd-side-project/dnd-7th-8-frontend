@@ -19,7 +19,7 @@ const ChapterTitle = styled.div`
     margin-bottom: 10px;
 `;
 
-const ChapterTitleSmall = styled.span`
+export const ChapterTitleSmall = styled.span`
     font-size: 14px;
     margin-bottom: 5px;
     margin-right: 8px;
@@ -61,7 +61,7 @@ const StepBox = styled.div`
     }
 `;
 
-const StepNum = styled.div`
+export const StepNum = styled.div`
     display: flex;
     background: #fff8f3;
     width: 24px;
@@ -73,7 +73,7 @@ const StepNum = styled.div`
     margin-right: 8px;
 `;
 
-const RatingWrapper = styled.div`
+export const RatingWrapper = styled.div`
     display: flex;
     margin-right: 69px;
     img {

@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-const Bar = styled.div`
+export const Bar = styled.div`
     display: flex;
     flex-direction: column;
     background: #fafaf6;

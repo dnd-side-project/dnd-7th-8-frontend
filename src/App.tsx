@@ -5,6 +5,8 @@ import RecipeList from "./pages/RecipeList";
 import styled from "styled-components";
 import Header from "./components/Header";
 import RecipeDetail from "./pages/RecipeDetail";
+import RecipeRegister from "./pages/RecipeRegister";
+import Home from "./pages/Home";
 
 const Content = styled.div`
     width: 1240px;
@@ -14,12 +16,14 @@ const Content = styled.div`
 function App() {
     return (
         <Content>
-            <Header />
             <BrowserRouter>
+                <Header />
+
                 <Routes>
-                    <Route path="/" />
+                    <Route path="/" element={<Home />} />
                     <Route path="/recipe" element={<RecipeList />} />
                     <Route path="/recipe/*" element={<RecipeDetail />} />
+                    <Route path="/recipe/register" element={<RecipeRegister />} />
                 </Routes>
             </BrowserRouter>
         </Content>
