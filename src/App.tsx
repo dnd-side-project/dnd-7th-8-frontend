@@ -19,7 +19,6 @@ function App() {
                         <Route path="/" element={<SignIn />} />
                         <Route path="/drink" element={<Drink />} />{" "}
                         <Route path="/search/:name" element={<SearchResults />} />
-                        <Route path="/products/:id" element={<Product />} />
                     </Routes>
                 </Provider>
             </ChakraProvider>

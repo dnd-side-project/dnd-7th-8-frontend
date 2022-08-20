@@ -1,7 +1,6 @@
-import { Box, Flex, Tabs, TabList, Tab, Grid, useMediaQuery } from "@chakra-ui/react";
-import { searchTags } from "./mockDB/db";
-import Badge from "@mui/material";
-import { useContext } from "react";
+import { Box, Flex, Tabs, TabList, Tab, Grid, useMediaQuery, Link, Heading } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
+import { useContext, useState } from "react";
 import { GlobalContext } from "./context/GlobalState";
 import loadableVisibility from "react-loadable-visibility/loadable-components";
 import LoadingProduct from "./LoadingProduct";
@@ -10,52 +9,37 @@ import LoadingProduct from "./LoadingProduct";
 const ProductCard = loadableVisibility(() => import("./ProductCard"), {
     fallback: <LoadingProduct />,
 });
-
 // Give the components chakra props
 const Main = () => {
     const { products, savedItemsCount } = useContext(GlobalContext);
     const [isLargerThan567] = useMediaQuery("(min-width: 567px)");
 
     return (
-        <Box
-            as="main"
-            boxShadow="base"
-            mx={[0, 4]}
-            h="100%"
-            rounded="md"
-            border="1px solid"
-            borderColor="gray.200"
-            p={3}
-        >
+        <Box as="main" mx={[0, 4]} h="100%" rounded="md">
             <Flex align="flex-end" justify="space-between" flexWrap="wrap">
                 <Flex justify="space-between" align="center" flexWrap="wrap" w="100%">
+                    <Heading fontFamily={"SUIT-Variable"} fontSize="28px" fontWeight="bold" ml={2} mb={6} mx={4}>
+                        모든 음료(100)
+                    </Heading>
                     <Tabs variant="unstyled" size="sm" mb={5}>
-                        <TabList bg="appBlue.50" rounded="md">
+                        <TabList>
                             <Tab
                                 _selected={{
-                                    border: "1px solid",
-                                    borderColor: "gray.200",
-                                    color: "appBlue.400",
-                                    bg: "white",
-                                    rounded: "base",
-                                    boxShadow: "base",
+                                    color: "black",
                                 }}
                                 fontSize={["xs", "sm"]}
+                                color={"gray"}
                             >
-                                추천순
+                                <li style={{ color: "#FB5C00" }}></li>추천순
                             </Tab>
                             <Tab
                                 _selected={{
-                                    border: "1px solid",
-                                    borderColor: "gray.200",
-                                    color: "appBlue.400",
-                                    bg: "white",
-                                    rounded: "base",
-                                    boxShadow: "base",
+                                    color: "black",
                                 }}
                                 fontSize={["xs", "sm"]}
+                                color={"gray"}
                             >
-                                찜 많은 순
+                                <li style={{ color: "#FB5C00" }}></li>찜 많은 순
                             </Tab>
                         </TabList>
                     </Tabs>
@@ -64,7 +48,6 @@ const Main = () => {
             <Grid
                 p={3}
                 templateColumns="repeat(auto-fit, minmax(240px, 1fr))"
-                gap={3}
                 placeItems="center"
                 placeContent="center"
             >

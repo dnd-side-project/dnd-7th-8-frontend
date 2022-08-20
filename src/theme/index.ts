@@ -18,8 +18,8 @@ const overrides = {
         Tabs,
     },
     fonts: {
-        heading: "'Quicksand', sans-serif",
-        body: "'Quicksand', sans-serif",
+        heading: "‘SUIT Variable’, sans-serif",
+        body: "‘SUIT Variable’, sans-serif",
     },
 };
 
