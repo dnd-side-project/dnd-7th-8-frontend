@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 //파일참조
 import AuthInput from "../../components/SignIn/AuthInput";
 import AuthButton from "../../components/SignIn/AuthButton";
@@ -31,17 +31,7 @@ const SignInContainer: React.FC = () => {
     let [savedLoginId, setSavedLoginId] = useState("");
     let [savedLoginPw, setSavedLoginPw] = useState("");
     let sessionStorage = window.sessionStorage;
-    //이름, 이메일, 비밀번호, 비밀번호 확인
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    //오류메시지 상태저장
-    const [emailMessage, setEmailMessage] = useState<string>("");
-    const [passwordMessage, setPasswordMessage] = useState<string>("");
-
-    // 유효성 검사
-    const [isEmail, setIsEmail] = useState<boolean>(false);
-    const [isPassword, setIsPassword] = useState<boolean>(false);
-
+    const navigate = useNavigate();
     const handleId = (e: any) => {
         const changedEmail = removeWhitespace(e.target.value);
         setId(changedEmail);
@@ -59,67 +49,33 @@ const SignInContainer: React.FC = () => {
         setPw(changedPassword);
     };
 
-    const onSubmitButton = async (e: any) => {
+    const onSubmitButton = (e: any) => {
+        // if(idValid && pwValid) {
         e.preventDefault();
-        const regex =
-            /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+])(?!.*[^a-zA-z0-9$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;
-
-        if (regex.test(pw)) {
-            setPwValid(true);
-        } else {
-            setPwValid(false);
-        }
-        /*
-        if(idValid && pwValid) {
-            e.preventDefault();
-            console.log(`id: ${id}, pw: ${pw}`);
-            const res = await axios({
-                headers: {
-                    withCredentials: true,
-                    "Access-Control-Allow-Origin": "http://localhost:3000",
-                    'Accept': 'application/json',
-                },
-                method: 'POST',
-                url: 'http://hana-umc.shop:8080/login',
-                data: {
-                    username: id,
-                    password: pw,
-                }
-            }).then((response) => {
-                console.log(response); // 출력값 확인하기
+        console.log(id, pw);
+        axios
+            .post(`http://mazle.ml/users/login/`, { email: id, passwd: pw })
+            .then((response) => {
                 alert("로그인에 성공했습니다!");
-                sessionStorage.setItem("userIDx", response.userIdx);
-                sessionStorage.setItem("name", response.name);
-                sessionStorage.setItem("role", response.role);
-                
-                setSavedLoginId(id);
-                setSavedLoginPw(pw);
-                setIsLoggedIn(true);
-                setIsRole(response.userIdx);
-                setIsUserID(response.name);
-                setIsUserID(response.role);
-                
-                window.location.href = "/";
-            }).catch((error) => {
-                console.log(error);
+                console.log(response);
             })
-            
-        }
-        */
+            .catch((err) => {
+                console.log(err);
+            });
 
-        if (id === User.id && pw === User.pw) {
-            alert("로그인에 성공했습니다!");
-            sessionStorage.setItem("id", id);
-            sessionStorage.setItem("pw", pw);
+        // if (id === User.id && pw === User.pw) {
+        //     alert("로그인에 성공했습니다!");
+        //     sessionStorage.setItem("id", id);
+        //     sessionStorage.setItem("pw", pw);
 
-            // setSavedLoginId(sessionStorage.getItem("id"));
-            // setSavedLoginPw(sessionStorage.getItem("pw"));
-            setSavedLoginId(id);
-            setSavedLoginPw(pw);
-            window.location.href = "/";
-        } else {
-            alert("등록되지 않은 회원입니다.");
-        }
+        //     // setSavedLoginId(sessionStorage.getItem("id"));
+        //     // setSavedLoginPw(sessionStorage.getItem("pw"));
+        //     setSavedLoginId(id);
+        //     setSavedLoginPw(pw);
+        //     window.location.href = "/";
+        // } else {
+        //     alert("등록되지 않은 회원입니다.");
+        // }
     };
 
     useEffect(() => {
@@ -165,7 +121,10 @@ const SignInContainer: React.FC = () => {
                 </BottomButton>
                 <RememberCheck />
             </div>
-            <CenterAlignedLink to="/signup" />
+            <CenterAlignedLink
+                to="/signup/start
+            "
+            />
         </CardBackground>
     );
 };

@@ -1,9 +1,10 @@
 import { Box, Flex, Tabs, TabList, Tab, Grid, useMediaQuery, Link, Heading } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "./context/GlobalState";
 import loadableVisibility from "react-loadable-visibility/loadable-components";
 import LoadingProduct from "./LoadingProduct";
+import axios from "axios";
 
 // Lazy load each product and display them when they become visible in the viewport
 const ProductCard = loadableVisibility(() => import("./ProductCard"), {
@@ -12,7 +13,15 @@ const ProductCard = loadableVisibility(() => import("./ProductCard"), {
 // Give the components chakra props
 const Main = () => {
     const { products, savedItemsCount } = useContext(GlobalContext);
-    const [isLargerThan567] = useMediaQuery("(min-width: 567px)");
+    const [productItems, setProductItems] = useState([]);
+    let productData;
+    const getPosts = async () => {};
+    useEffect(() => {
+        axios.get("http://mazle.ml/drink/get/list/", { withCredentials: true }).then((res) => {
+            console.log(res.data);
+            setProductItems(res.data);
+        });
+    }, []);
 
     return (
         <Box as="main" mx={[0, 4]} h="100%" rounded="md">

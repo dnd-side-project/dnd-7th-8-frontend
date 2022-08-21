@@ -7,7 +7,6 @@ import Header from "../components/Nav/Header";
 const DrinkPage = () => {
     return (
         <>
-            <Header />
             <Container>
                 <Main />
             </Container>
