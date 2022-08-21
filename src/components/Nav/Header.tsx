@@ -16,16 +16,14 @@ const Header = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Flex
-            as="header"
             direction="column"
             height={["120px", "fit-content"]}
             position="fixed"
             top={0}
-            zIndex={10}
             w="100%"
             bg="white"
             boxShadow="base"
-            style={{ padding: "0% 10%" }}
+            style={{ padding: "0% 10%", zIndex: "1" }}
         >
             <Flex height="65px" px={[null, 2]} py={[7, 9]} justify={["space-between", null]}>
                 <Flex align="center">

@@ -2,6 +2,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import Sidebar from "./Sidebar/Sidebar";
 import { ReactNode } from "react";
 import Banner from "./Banner";
+import Header from "../Nav/Header";
 
 type Props = {
     children: ReactNode;
@@ -10,6 +11,7 @@ type Props = {
 const Container = ({ children }: Props) => {
     return (
         <>
+            <Header />
             <Banner />
             <Flex direction="column" minH="100vh" style={{ padding: "0% 10%", fontFamily: "SUIT-Variable" }}>
                 <Flex flex={1} minH="100%">

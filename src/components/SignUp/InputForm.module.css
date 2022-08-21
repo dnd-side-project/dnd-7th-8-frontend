@@ -1,0 +1,63 @@
+.inputFormBlock {
+    width: 700px;
+    height: 35px;
+    display: block;
+    margin: 1px auto;
+    border: 1.5px solid #D2D2D2;
+    border-radius: 10px;
+}
+
+.inputFormBlock:focus {
+    outline: 2px solid #fbc22e;
+}
+
+
+.inputForm {
+    width: 700px;
+    height: 35px;
+    margin: 5px;
+    border: 1.5px solid #D2D2D2;
+    border-radius: 10px;
+}
+
+.inputForm:focus {
+    outline: 2px solid #fbc22e;
+}
+
+.errorMessageWrap {
+    margin-top: 8px;
+    color: #ef0000;
+    font-size: 12px;
+}
+
+.inputLabel {
+    width: 700px;
+    text-align: left;
+    margin: auto;
+    margin-top: 10px;
+    font-weight: 650;
+    font-size: 14px;
+}
+
+.formButton {
+    width: 700px;
+    height: 35px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    color: white;
+    background-color: #FBC22E;
+    border: 0;
+    outline: 0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.formButton:hover {
+    transition: all ease 0.1s;
+    transform: scale(1.02);
+}
+
+.formButton:disabled {
+    background-color: #dadada;
+    color: white;
+}
