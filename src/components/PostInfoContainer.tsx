@@ -4,6 +4,21 @@ import Block from "./Block";
 import star_empty from "../assets/images/star_empty.png";
 import star_filled from "../assets/images/star_filled.png";
 
+type ObjType = {
+    [index: string]: string;
+    soju: string;
+    beer: string;
+    paper: string;
+    drink: string;
+};
+
+export const MEASURE_STANDARD: ObjType = {
+    soju: "소주잔",
+    beer: "맥주잔",
+    paper: "종이컵",
+    drink: "음료 기준",
+};
+
 const PostInfoWrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -22,7 +37,8 @@ const ChapterTitle = styled.div`
 export const ChapterTitleSmall = styled.span`
     font-size: 14px;
     margin-bottom: 5px;
-    margin-right: 8px;
+    margin-right: 0px;
+    min-width: 60px;
 `;
 
 const Info = styled.div`
@@ -75,14 +91,14 @@ export const StepNum = styled.div`
 
 export const RatingWrapper = styled.div`
     display: flex;
-    margin-right: 69px;
+    margin-right: 20px;
     img {
         width: 14px;
         height: 14px;
     }
 `;
 
-const Tag = styled.div`
+export const Tag = styled.div`
     display: flex;
     background: #f5f5f5;
     border-radius: 100px;
@@ -90,7 +106,7 @@ const Tag = styled.div`
     margin-right: 8px;
 `;
 
-const RowGrid = styled.div`
+export const RowGrid = styled.div`
     display: flex;
     margin: 10px;
 `;
@@ -100,62 +116,91 @@ const ColumnGrid = styled.div`
     flex-direction: column;
 `;
 
-const PostInfoContainer = () => {
+const PostInfoContainer = ({ recipeInfo }: any) => {
+    console.log(recipeInfo);
     return (
         <PostInfoWrapper>
             <TitleWrapper>
-                <h1>레시피 이름</h1>
+                <h1>{recipeInfo.recipe_name}</h1>
             </TitleWrapper>
             <RecipeInfoWrapper>
                 <LineInfoBox>
                     <ChapterTitleSmall>난이도</ChapterTitleSmall>
                     <RatingWrapper>
-                        <img src={star_filled} />
-                        <img src={star_empty} />
-                        <img src={star_empty} />
-                        <img src={star_empty} />
-                        <img src={star_empty} />
+                        {[...Array(recipeInfo.diff_score)].map((n, idx) => (
+                            <img src={star_filled} />
+                        ))}
+                        {[...Array(5 - recipeInfo.diff_score)].map((n, idx) => (
+                            <img src={star_empty} />
+                        ))}
                     </RatingWrapper>
                     <ChapterTitleSmall>가성비</ChapterTitleSmall>
                     <RatingWrapper>
-                        <img src={star_filled} />
-                        <img src={star_filled} />
-                        <img src={star_filled} />
-                        <img src={star_filled} />
-                        <img src={star_empty} />
+                        {[...Array(recipeInfo.price_score)].map((n, idx) => (
+                            <img src={star_filled} />
+                        ))}
+                        {[...Array(5 - recipeInfo.price_score)].map((n, idx) => (
+                            <img src={star_empty} />
+                        ))}
                     </RatingWrapper>
+                    {recipeInfo.alcohol_score != 0 && recipeInfo.alcohol_score && (
+                        <>
+                            <ChapterTitleSmall>단맛 정도</ChapterTitleSmall>
+                            <RatingWrapper>
+                                {[...Array(recipeInfo.sweet_score)].map((n, idx) => (
+                                    <img src={star_filled} />
+                                ))}
+                                {[...Array(5 - recipeInfo.sweet_score)].map((n, idx) => (
+                                    <img src={star_empty} />
+                                ))}
+                            </RatingWrapper>
+                            <ChapterTitleSmall>알콜정도</ChapterTitleSmall>
+                            <RatingWrapper>
+                                {[...Array(recipeInfo.alcohol_score)].map((n, idx) => (
+                                    <img src={star_filled} />
+                                ))}
+                                {[...Array(5 - recipeInfo.alcohol_score)].map((n, idx) => (
+                                    <img src={star_empty} />
+                                ))}
+                            </RatingWrapper>
+                        </>
+                    )}
                 </LineInfoBox>
                 <InfoBox>
                     <ChapterTitle>메인 음료</ChapterTitle>
-                    <Info>재료1, 재료2</Info>
+                    <Info>
+                        {recipeInfo.main_meterial_list.length > 0 &&
+                            recipeInfo.main_meterial_list.map((meterial: any): any => (
+                                <span>{JSON.stringify(meterial.drink_name).replaceAll('"', "")} </span>
+                            ))}
+                    </Info>
                 </InfoBox>
                 <InfoBox>
                     <ChapterTitle>부가 재료</ChapterTitle>
-                    <Info>재료1, 재료2, 재료3, 재료4</Info>
+                    <Info>
+                        {recipeInfo.sub_meterial_list.length > 0 &&
+                            recipeInfo.sub_meterial_list.map((meterial: any): any => (
+                                <span>{JSON.stringify(meterial.drink_name)}</span>
+                            ))}
+                    </Info>
                 </InfoBox>
                 <InfoBox>
                     <ChapterTitle>총 가격</ChapterTitle>
-                    <Info>3,000원</Info>
+                    <Info>{recipeInfo.price}원</Info>
                 </InfoBox>
                 <InfoBox>
                     <ChapterTitle>계량 기준</ChapterTitle>
-                    <Info>소주잔</Info>
+                    <Info>{MEASURE_STANDARD[recipeInfo.measure_standard]}</Info>
                 </InfoBox>
                 <InfoBox>
                     <ChapterTitle>만드는 법</ChapterTitle>
                     <StepBox>
-                        <Info>
-                            <StepNum>1</StepNum>
-                            <span>뭐랑 뭐를 섞는다.</span>
-                        </Info>
-                        <Info>
-                            <StepNum>2</StepNum>
-                            <span>
-                                뭐랑 뭐를 섞는다. 뭐랑 뭐를 섞는다. 뭐랑 뭐를 섞는다. 뭐랑 뭐를 섞는다. 뭐랑 뭐를
-                                섞는다. 뭐랑 뭐를 섞는다. 뭐랑 뭐를 섞는다. 뭐랑 뭐를 섞는다. 뭐랑 뭐를 섞는다. 뭐랑
-                                뭐를 섞는다.
-                            </span>
-                        </Info>
+                        {recipeInfo.description.map((desc: string, index: number) => (
+                            <Info>
+                                <StepNum>{index + 1}</StepNum>
+                                <span>{desc}</span>
+                            </Info>
+                        ))}
                     </StepBox>
                 </InfoBox>
                 <Block>
@@ -163,16 +208,18 @@ const PostInfoContainer = () => {
                         <b>추가 tip!</b>
                     </div>
                     <br />
-                    <div>뭐를 섞으면 더 맛있어요</div>
+                    <div>{recipeInfo.tip}</div>
                 </Block>
                 <LineInfoBox>
                     <ColumnGrid>
                         <RowGrid>
-                            <div>닉네임</div>
+                            <div>{recipeInfo.nickname}</div>
                         </RowGrid>
                         <RowGrid>
-                            <Tag>#태그1</Tag>
-                            <Tag>#태그2</Tag> <Tag>#태그3</Tag>
+                            {recipeInfo.tag.length > 0 &&
+                                recipeInfo.tag.map((val: any): any => (
+                                    <Tag>#{JSON.stringify(val).replaceAll('"', "")}</Tag>
+                                ))}
                         </RowGrid>
                     </ColumnGrid>
                 </LineInfoBox>

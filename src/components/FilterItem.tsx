@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const FilterWrapper = styled.div`
@@ -26,28 +26,43 @@ export const CustomCheckbox = styled.input`
     &:checked {
         background: #fb5c00;
     }
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
-const menuList = {
-    none: [
-        { name: "주스", value: "juice" },
-        { name: "탄산", value: "soft_drink" },
-        { name: "기능성 음료", value: "energe_drink" },
-        { name: "차/커피", value: "tea_coffe" },
-        { name: "유제품", value: "milk" },
-        { name: "기타", value: "none_etc" },
-    ],
-    alco: [
-        { name: "소주", value: "soju" },
-        { name: "맥주", value: "beer" },
-        { name: "양주", value: "whisky" },
-        { name: "탁주", value: "takju" },
-        { name: "과일주", value: "fruit" },
-        { name: "기타", value: "alco_etc" },
-    ],
-};
-
 const FilterItem = () => {
+    const [menuList, setMenuList] = useState({
+        none: [
+            { name: "주스", value: "juice", checked: false },
+            { name: "탄산", value: "soft_drink", checked: false },
+            { name: "기능성 음료", value: "energe_drink", checked: false },
+            { name: "차/커피", value: "tea_coffe", checked: false },
+            { name: "유제품", value: "milk", checked: false },
+            { name: "기타", value: "none_etc", checked: false },
+        ],
+        alco: [
+            { name: "소주", value: "soju", checked: false },
+            { name: "맥주", value: "beer", checked: false },
+            { name: "양주", value: "whisky", checked: false },
+            { name: "탁주", value: "takju", checked: false },
+            { name: "과일주", value: "fruit", checked: false },
+            { name: "기타", value: "alco_etc", checked: false },
+        ],
+    });
+
+    const [checkedMenu, setCheckedMenu] = useState([]);
+
+    const onCheck = (drink: object, isAlco: string) => {
+        // if(drink.checked){
+        //     setCheckedMenu()
+        //     setMenuList()
+        // }
+        // let isChecked = false;
+        // menuList[isAlco].map((menu)=> menu.value===drink.value && {menu.checked && isChecked=true})
+        console.log(menuList.none[0]);
+    };
+
     return (
         <FilterWrapper>
             <ListWrapper>
@@ -57,7 +72,13 @@ const FilterItem = () => {
                         <Item>
                             <SubMenu>
                                 {drink.name}
-                                <CustomCheckbox type="checkbox" value={drink.value} />
+                                <CustomCheckbox
+                                    type="checkbox"
+                                    value={drink.value}
+                                    onClick={() => {
+                                        onCheck(drink, "none");
+                                    }}
+                                />
                             </SubMenu>
                         </Item>
                     ))}

@@ -1,6 +1,8 @@
 import RecipeCard from "../components/RecipeCard";
 import styled from "styled-components";
 import FilterItem from "../components/FilterItem";
+import { useEffect, useState } from "react";
+import { getRecipeList } from "../apis/recipe";
 
 const PageWrapper = styled.div`
     display: flex;
@@ -24,6 +26,20 @@ const RecipeListWrapper = styled.div`
 `;
 
 const RecipeList = () => {
+    const [recipeList, setRecipeList] = useState([]);
+
+    useEffect(() => {
+        getRecipeList(
+            (res: any) => {
+                console.log(res.data);
+                setRecipeList(res.data);
+            },
+            () => {
+                alert("fail");
+            },
+        );
+    }, []);
+
     return (
         <PageWrapper>
             <FilterWrapper>
@@ -31,10 +47,10 @@ const RecipeList = () => {
                 <FilterItem />
             </FilterWrapper>
             <ListWrapper>
-                <h2>검색된 조합레시피(55)</h2>
+                <h2>검색된 조합레시피({recipeList.length})</h2>
                 <RecipeListWrapper>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                        <RecipeCard key={num} />
+                    {recipeList.map((recipe, index) => (
+                        <RecipeCard recipe={recipe} key={index} />
                     ))}
                 </RecipeListWrapper>
             </ListWrapper>

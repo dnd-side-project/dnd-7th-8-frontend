@@ -29,14 +29,14 @@ const PostItem = styled.div`
     align-items: center;
 `;
 
-const PostImgContainer = () => {
+const PostImgContainer = ({ recipeInfo }: any) => {
     return (
         <ImgContainer>
-            <RecipeImg src={image27} />
+            <RecipeImg src={recipeInfo.img !== "" ? recipeInfo : image27} />
             <PostInfo>
                 <PostItem>
                     <img src={heart} />
-                    100
+                    {recipeInfo.like_cnt}
                 </PostItem>
                 <PostItem>
                     <img src={eye} />
