@@ -7,8 +7,8 @@ module.exports = {
     extends: [
         "plugin:@typescript-eslint/recommended",
         // typescript 표준 규칙 모음
-        "plugin:import/errors",
-        "plugin:import/warnings",
+        // "plugin:import/errors",
+        // "plugin:import/warnings",
         "plugin:import/typescript",
         // import 관련 규칙 모음
 
@@ -22,6 +22,12 @@ module.exports = {
         // 기준은 root 입니다.
     },
     rules: {
+        "prettier/prettier": [
+            "error",
+            {
+                endOfLine: "auto",
+            },
+        ],
         // 추가하고 싶은 rule을 더 추가해줍니다.
     },
 };
