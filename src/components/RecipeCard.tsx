@@ -73,7 +73,9 @@ const RecipeCard = ({ recipe }: any) => {
                 <Info>
                     <Name>{recipe.recipe_name}</Name>
                     <HeartWrapper>
-                        <TagWrapper>{recipe.tag.length > 0 && recipe.tag((tag: any) => <Tag>#{tag}</Tag>)}</TagWrapper>
+                        <TagWrapper>
+                            {recipe.tag.length > 0 && recipe.tag.map((tag: any) => <Tag>#{tag}</Tag>)}
+                        </TagWrapper>
                         <Heart>
                             <img src={heaert18} />
                             <span>{recipe.like_cnt}</span>

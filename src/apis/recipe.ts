@@ -3,8 +3,7 @@ import axios from "axios";
 const URL = "http://43.200.106.127";
 
 const jwtToken =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImIxYWExZGQ2LTc1M2YtNDEyMi05NmI3LTZmOTMxMTQ4MzA1ZCIsImV4cCI6MTY2MTI1MjE2M30.kpsClXAEjuv9V82DefoOVkxb5wJ338_HVmc9g1BHY2I";
-
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYxZGM5MWZkLTBiZDYtNDQ0Mi04N2FiLTA1YzgxNGQxM2U3NyIsImV4cCI6MTY2MTI2Nzg3MH0.-nko7uwdcAbxI49Kv4MPY5BH3iaQCZN6AezctR-Jtws";
 export const getRecipeList = async (success: any, fail: any) => {
     try {
         const res = await axios.get(`${URL}/recipe/list`, {
@@ -62,11 +61,13 @@ export const registerSubMeterial = async (param: any, success: any, fail: any) =
             headers: {
                 Accept: "application/json",
                 "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${jwtToken}`,
+                Authorization: `Bearer ${JSON.parse(jwtToken)}`,
             },
         };
 
-        const res = await axios.post(`${URL}/recipe/meterial`, param, config);
+        const res = await axios.post(`${URL}/recipe/meterial`, { params: param }, config);
+
+        console.log(res);
 
         success(res);
     } catch {
@@ -90,7 +91,7 @@ export const registerRecipe = async (param: any, success: any, fail: any) => {
             headers: {
                 Accept: "application/json",
                 "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${jwtToken}`,
+                Authorization: `Bearer ${JSON.parse(jwtToken)}`,
             },
         };
 

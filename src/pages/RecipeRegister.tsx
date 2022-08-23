@@ -518,7 +518,11 @@ const RecipeRegister = () => {
                                             <img
                                                 src={
                                                     main.img && main.img !== ""
-                                                        ? URL.createObjectURL(main.img)
+                                                        ? URL.createObjectURL(
+                                                              new Blob([new ArrayBuffer(main.img)], {
+                                                                  type: "image/png",
+                                                              }),
+                                                          )
                                                         : drink_ill
                                                 }
                                             />
