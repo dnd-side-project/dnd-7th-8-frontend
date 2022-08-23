@@ -95,20 +95,24 @@ export const RatingWrapper = styled.div`
     img {
         width: 14px;
         height: 14px;
+        &:hover {
+            cursor: pointer;
+        }
     }
 `;
 
 export const Tag = styled.div`
     display: flex;
     background: #f5f5f5;
-    border-radius: 100px;
+    border-radius: 50px;
     padding: 6px 12px 6px 12px;
-    margin-right: 8px;
+    margin: 5px 8px 0 0;
 `;
 
 export const RowGrid = styled.div`
     display: flex;
     margin: 10px;
+    flex-wrap: wrap;
 `;
 
 const ColumnGrid = styled.div`

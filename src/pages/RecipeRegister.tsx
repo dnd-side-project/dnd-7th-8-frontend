@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Bar } from "../components/Block";
 import {
@@ -13,8 +13,9 @@ import star_empty from "../assets/images/star_empty.png";
 import star_filled from "../assets/images/star_filled.png";
 import plus_btn from "../assets/images/plus_btn.png";
 import add_drink from "../assets/images/add_drink.png";
+import drink_ill from "../assets/images/drink_ill.png";
 import { CustomCheckbox } from "../components/FilterItem";
-import { getSubMeterial } from "../apis/recipe";
+import { getDrinkList, getSubMeterial, registerSubMeterial } from "../apis/recipe";
 
 const TabBlock = styled(Bar)<{ checked?: boolean }>`
     background: ${(prop) => (prop.checked ? "#fafaf6" : "white")};
@@ -122,20 +123,29 @@ const CheckboxWrapper = styled.div`
     }
 `;
 
-const ImportImage = styled.div`
-    width: 180px;
+// 추가됨(수정됨)
+const ImportImage = styled.div<{ bg?: any }>`
+    width: 150px;
     height: 180px;
     background: #f5f5f5;
     border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
-    img {
+    background-image: url(${({ bg }: any) => bg && bg});
+    box-shadow: ${({ bg }: any): any => bg && "0px 4px 12px rgba(0, 0, 0, 0.16)"};
+    background-size: ${({ bg }: any): any => bg && "180px 180px"};
+
+    label {
         width: 40px;
         height: 40px;
+        background-image: url(${plus_btn});
         &:hover {
             cursor: pointer;
         }
+    }
+    input {
+        display: none;
     }
 `;
 
@@ -199,9 +209,44 @@ const FloatingBox = styled.div`
     }
 `;
 
+// 추가됨
+const DrinkCard = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    img {
+        width: 100px;
+        height: 120px;
+    }
+`;
+
+const DrinkCardFloatingBox = styled(FloatingBox)`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 128px;
+    height: 142px;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 400px;
+`;
+
+const UserInputImage = styled.img`
+    width: 180px;
+    height: 180px;
+`;
+
 const RecipeRegister = () => {
     const [isAlco, setIsAlco] = useState(false);
-    const [recipeInfo, setRecipeInfo] = useState({
+    const [recipeInfo, setRecipeInfo] = useState<{
+        img: any;
+        recipe_name: string;
+        summary: string;
+        diff_score: number;
+        price_score: number;
+        sweet_score: number;
+        alcohol_score: number;
+    }>({
         img: null,
         recipe_name: "",
         summary: "",
@@ -210,15 +255,35 @@ const RecipeRegister = () => {
         sweet_score: 0,
         alcohol_score: 0,
     });
-    const [resource, setResource] = useState({
+    const [resource, setResource] = useState<{ main_meterial: any[]; sub_meterial: any[]; price: number }>({
         main_meterial: [],
         sub_meterial: [],
         price: 0,
     });
-    const [desc, setDesc] = useState({ mesaure_standard: [], description: [], tip: [] });
-    const [tag, setTag] = useState([]);
+    const [desc, setDesc] = useState<{ measure_standard: any[]; description: any[]; tip: string }>({
+        measure_standard: [],
+        description: [],
+        tip: "",
+    });
+    const [tag, setTag] = useState<any[]>([]);
     const [isActiveMainSearch, setIsActiveMainSearch] = useState(false);
     const [searchedMeterial, setSearchedMeterial] = useState([]);
+    const [drinkList, setDrinkList] = useState<any[]>([]); // 추가됨
+    const [descriptionInput, setDescriptionInput] = useState(""); // 추가됨
+    const [file, setFile] = useState<File>(); // 추가됨
+
+    // 추가됨
+    useEffect(() => {
+        getDrinkList(
+            (res: any) => {
+                console.log(res.data.data);
+                setDrinkList(res.data.data);
+            },
+            (e: any) => {
+                alert("오류가 발생했습니다.");
+            },
+        );
+    }, []);
 
     const onSetRecipeInfo = (obj: object) => {
         setRecipeInfo({ ...recipeInfo, ...obj });
@@ -230,6 +295,35 @@ const RecipeRegister = () => {
 
     const onSetDesc = (obj: object) => {
         setDesc({ ...desc, ...obj });
+    };
+
+    // 추가됨
+    const fileRef = useRef<HTMLInputElement | null>(null);
+
+    const onUploadImage = useCallback((e: any) => {
+        if (!e.target.files) return;
+        if (e.target.files.length > 0) {
+            setFile(e.target.files[0]);
+        }
+    }, []);
+
+    const onUploadImageButtonClick = useCallback((e: any) => {
+        e.preventDefault();
+        if (!fileRef.current) {
+            return;
+        }
+        fileRef.current.click();
+    }, []);
+
+    const submitRecipe = () => {
+        const param = {
+            ...recipeInfo,
+            img: file ? file : null,
+            ...resource,
+            ...desc,
+            tag: tag,
+        };
+        console.log(param);
     };
 
     return (
@@ -258,9 +352,29 @@ const RecipeRegister = () => {
                     <OptionContainer>
                         <OptionName>완성 사진</OptionName>
                         <SubOption>
-                            <ImportImage>
-                                <img src={plus_btn} />
+                            <ImportImage bg={file && URL.createObjectURL(file)}>
+                                {/* 추가됨 */}
+                                <label
+                                    onClick={(e) => {
+                                        onUploadImageButtonClick(e);
+                                    }}
+                                >
+                                    <img src={plus_btn} />
+                                </label>
+                                <input
+                                    id="uploader"
+                                    type="file"
+                                    src={plus_btn}
+                                    ref={fileRef}
+                                    onChange={onUploadImage}
+                                />
                             </ImportImage>
+
+                            {/* {file &&
+                            <UserInputImage>
+                                <img src={URL.createObjectURL(file)}/>
+                            </UserInputImage>
+                        } */}
                         </SubOption>
                     </OptionContainer>
                     <OptionContainer>
@@ -297,46 +411,94 @@ const RecipeRegister = () => {
                         <SubOption>
                             <ChapterTitleSmall>난이도</ChapterTitleSmall>
                             <RatingWrapper>
-                                {[...Array(recipeInfo.diff_score)].map((n) => (
-                                    <img src={star_filled} key={n} />
-                                ))}
-                                {[...Array(5 - recipeInfo.diff_score)].map((n) => (
-                                    <img src={star_empty} key={n} />
-                                ))}
-                                {/* <img src={star_filled} />
-                                <img src={star_empty} />
-                                <img src={star_empty} />
-                                <img src={star_empty} />
-                                <img src={star_empty} /> */}
+                                {/* 추가됨(수정됨) -> 별점 쓰는 모든 컴포넌트에 아래와 같이 수정 필요 */}
+                                {[...Array(5)].map((n, index) =>
+                                    index + 1 <= recipeInfo.diff_score ? (
+                                        <img
+                                            src={star_filled}
+                                            key={index + 1}
+                                            onClick={() => {
+                                                onSetRecipeInfo({ diff_score: index + 1 });
+                                            }}
+                                        />
+                                    ) : (
+                                        <img
+                                            src={star_empty}
+                                            key={index + 1}
+                                            onClick={() => {
+                                                onSetRecipeInfo({ diff_score: index + 1 });
+                                            }}
+                                        />
+                                    ),
+                                )}
                             </RatingWrapper>
                             <ChapterTitleSmall>가성비</ChapterTitleSmall>
                             <RatingWrapper>
-                                {[...Array(recipeInfo.price_score)].map((n) => (
-                                    <img src={star_filled} key={n} />
-                                ))}
-                                {[...Array(5 - recipeInfo.price_score)].map((n) => (
-                                    <img src={star_empty} key={n} />
-                                ))}
+                                {[...Array(5)].map((n, index) =>
+                                    index + 1 <= recipeInfo.price_score ? (
+                                        <img
+                                            src={star_filled}
+                                            key={index + 1}
+                                            onClick={() => {
+                                                onSetRecipeInfo({ price_score: index + 1 });
+                                            }}
+                                        />
+                                    ) : (
+                                        <img
+                                            src={star_empty}
+                                            key={index + 1}
+                                            onClick={() => {
+                                                onSetRecipeInfo({ price_score: index + 1 });
+                                            }}
+                                        />
+                                    ),
+                                )}
                             </RatingWrapper>
                             {isAlco && (
                                 <SubOption>
                                     <ChapterTitleSmall>단맛</ChapterTitleSmall>
                                     <RatingWrapper>
-                                        {[...Array(recipeInfo.sweet_score)].map((n) => (
-                                            <img src={star_filled} key={n} />
-                                        ))}
-                                        {[...Array(5 - recipeInfo.sweet_score)].map((n) => (
-                                            <img src={star_empty} key={n} />
-                                        ))}
+                                        {[...Array(5)].map((n, index) =>
+                                            index + 1 <= recipeInfo.sweet_score ? (
+                                                <img
+                                                    src={star_filled}
+                                                    key={index + 1}
+                                                    onClick={() => {
+                                                        onSetRecipeInfo({ sweet_score: index + 1 });
+                                                    }}
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={star_empty}
+                                                    key={index + 1}
+                                                    onClick={() => {
+                                                        onSetRecipeInfo({ sweet_score: index + 1 });
+                                                    }}
+                                                />
+                                            ),
+                                        )}
                                     </RatingWrapper>
                                     <ChapterTitleSmall>알콜 농도</ChapterTitleSmall>
                                     <RatingWrapper>
-                                        {[...Array(recipeInfo.alcohol_score)].map((n) => (
-                                            <img src={star_filled} key={n} />
-                                        ))}
-                                        {[...Array(5 - recipeInfo.alcohol_score)].map((n) => (
-                                            <img src={star_empty} key={n} />
-                                        ))}
+                                        {[...Array(5)].map((n, index) =>
+                                            index + 1 <= recipeInfo.alcohol_score ? (
+                                                <img
+                                                    src={star_filled}
+                                                    key={index + 1}
+                                                    onClick={() => {
+                                                        onSetRecipeInfo({ alcohol_score: index + 1 });
+                                                    }}
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={star_empty}
+                                                    key={index + 1}
+                                                    onClick={() => {
+                                                        onSetRecipeInfo({ alcohol_score: index + 1 });
+                                                    }}
+                                                />
+                                            ),
+                                        )}
                                     </RatingWrapper>
                                 </SubOption>
                             )}
@@ -348,6 +510,23 @@ const RecipeRegister = () => {
                     <OptionContainer>
                         <OptionName>메인 음료</OptionName>
                         <SubOption>
+                            {/* 추가됨 */}
+                            {resource.main_meterial.length > 0 &&
+                                resource.main_meterial.map((main) => (
+                                    <AddDrinkBtn>
+                                        <DrinkCard>
+                                            <img
+                                                src={
+                                                    main.img && main.img !== ""
+                                                        ? URL.createObjectURL(main.img)
+                                                        : drink_ill
+                                                }
+                                            />
+                                            {main.drink_name}
+                                        </DrinkCard>
+                                    </AddDrinkBtn>
+                                ))}
+
                             <AddDrinkBtn
                                 onClick={() => {
                                     setIsActiveMainSearch(true);
@@ -356,16 +535,30 @@ const RecipeRegister = () => {
                                 <img src={add_drink} />
                             </AddDrinkBtn>
                             {isActiveMainSearch && (
-                                <FloatingBox>
-                                    <div>딸기</div>
-                                    <div>바나나</div>
-                                    <div>딸기</div>
-                                    <div>바나나</div>
-                                    <div>딸기</div>
-                                    <div>바나나</div>
-                                    <div>딸기</div>
-                                    <div>바나나</div>
-                                </FloatingBox>
+                                // 추가됨(수정됨)
+                                <DrinkCardFloatingBox>
+                                    {drinkList.length > 0 &&
+                                        drinkList.map((drink) => (
+                                            <DrinkCard
+                                                onClick={() => {
+                                                    onSetResource({
+                                                        main_meterial: [
+                                                            ...resource.main_meterial,
+                                                            {
+                                                                drink_id: drink.drink_id,
+                                                                drink_name: drink.drink_name,
+                                                                img: drink.img,
+                                                            },
+                                                        ],
+                                                    });
+                                                    setIsActiveMainSearch(false);
+                                                }}
+                                            >
+                                                <img src={drink_ill} />
+                                                {drink.drink_name}
+                                            </DrinkCard>
+                                        ))}
+                                </DrinkCardFloatingBox>
                             )}
                         </SubOption>
                     </OptionContainer>
@@ -384,7 +577,7 @@ const RecipeRegister = () => {
                             <OrderRound>
                                 <SmallInputContainer>
                                     <CustomInput
-                                        placeholder="부가재료를 적어주세요"
+                                        placeholder="입력 후 엔터를 쳐주세요"
                                         // onClick={() => {
                                         //     setIsActiveSubSearch(true);
                                         // }}
@@ -393,13 +586,33 @@ const RecipeRegister = () => {
                                             getSubMeterial(
                                                 { meterial_name: e.target.value },
                                                 (res: any) => {
-                                                    console.log(res);
                                                     setSearchedMeterial(res.data.meterial_name);
                                                 },
                                                 () => {
                                                     console.log("fail");
                                                 },
                                             );
+                                        }}
+                                        // 추가됨
+                                        onKeyDown={(e) => {
+                                            if (e.key == "Enter") {
+                                                let isExistMeterial = false;
+                                                if (searchedMeterial.length > 0)
+                                                    searchedMeterial.map((meterial) => {
+                                                        if (meterial === e.target.value) isExistMeterial = true;
+                                                    });
+                                                if (!isExistMeterial) {
+                                                    registerSubMeterial(
+                                                        { meterial_name: e.target.value },
+                                                        (res: any) => {
+                                                            console.log(res);
+                                                        },
+                                                        () => {
+                                                            alert("오류가 발생했습니다.");
+                                                        },
+                                                    );
+                                                }
+                                            }
                                         }}
                                     />
                                     <InputRightFloat>x</InputRightFloat>
@@ -421,7 +634,8 @@ const RecipeRegister = () => {
                                     )}
                                 </SmallInputContainer>
                             </OrderRound>
-                            <GrayButton>+ 부가재료 추가</GrayButton>
+                            {/* 추가됨 */}
+                            {/* <GrayButton>+ 부가재료 추가</GrayButton> */}
                         </SubOption>
                     </OptionContainer>
                     <OptionContainer>
@@ -444,7 +658,20 @@ const RecipeRegister = () => {
                                     <CustomCheckbox
                                         type="checkbox"
                                         value={measure[0]}
-                                        onChange={() => {
+                                        onChange={(e) => {
+                                            // 추가됨
+                                            if (e.target.checked)
+                                                onSetDesc({ measure_standard: [...desc.measure_standard, measure[0]] });
+                                            else
+                                                onSetDesc({
+                                                    measure_standard: [
+                                                        {
+                                                            measure_standard: desc.measure_standard.filter(
+                                                                (el) => el !== measure[0],
+                                                            ),
+                                                        },
+                                                    ],
+                                                });
                                             // const measure: any = measure[0];
                                             // if (
                                             //     desc.mesaure_standard.length > 0 &&
@@ -488,25 +715,38 @@ const RecipeRegister = () => {
                                 <StepNum>{desc.description.length + 1}</StepNum>
                                 <OrderRound>
                                     <CustomInput
-                                        placeholder="만드는 방법을 입력해주세요"
-                                        onKeyDown={(e) => {
-                                            console.log(e.key);
+                                        placeholder="만드는 방법을 입력 후 엔터를 쳐주세요"
+                                        value={descriptionInput}
+                                        // 추가됨
+                                        onChange={(e) => {
+                                            setDescriptionInput(e.target.value);
+                                        }}
+                                        onKeyPress={(e) => {
                                             if (e.key == "Enter") {
                                                 onSetDesc({ description: [...desc.description, e.target.value] });
+                                                setDescriptionInput(""); // 추가됨
                                             }
                                         }}
                                     />
                                     {/* <InputRightFloat>x</InputRightFloat> */}
                                 </OrderRound>
                             </StartInputContainer>
-                            <GrayButton>+ 방법 추가</GrayButton>
+                            {/* 추가됨 */}
+                            {/* <GrayButton>+ 방법 추가</GrayButton> */}
                         </SubOption>
                     </OptionContainer>
                     <OptionContainer>
                         <OptionName>참고 Tip!</OptionName>
                         <SubOption>
                             <InputContainer>
-                                <CustomInput placeholder="참고하면 좋을 나만의 tip을 알려주세요!" />
+                                {/* 추가됨 */}
+                                <CustomInput
+                                    placeholder="참고하면 좋을 나만의 tip을 알려주세요!"
+                                    value={desc.tip}
+                                    onChange={(e) => {
+                                        onSetDesc({ tip: e.target.value });
+                                    }}
+                                />
                                 <InputRightFloat>x</InputRightFloat>
                             </InputContainer>
                         </SubOption>
@@ -518,20 +758,20 @@ const RecipeRegister = () => {
                     <OptionContainer>
                         <OptionName>태그</OptionName>
                         <SubOption>
+                            <RowGrid>{tag.length > 0 && tag.map((tag) => <Tag>#{tag}</Tag>)}</RowGrid>
                             <InputContainer>
                                 <CustomInput
                                     placeholder="#태그 입력(최대 10개)."
-                                    onChange={(e) => {
-                                        // if (e.target.value == " ") setTag([...tag, e.target.value]);
+                                    onKeyPress={(e) => {
+                                        if (e.key == "Enter") setTag([...tag, e.target.value]);
                                     }}
                                 />
                             </InputContainer>
-                            <RowGrid>{tag.length > 0 && tag.map((tag) => <Tag>{tag}</Tag>)}</RowGrid>
                         </SubOption>
                     </OptionContainer>
                 </BlockWrapper>
                 <RightButtonWrapper>
-                    <button>레시피 등록</button>
+                    <button onClick={submitRecipe}>레시피 등록</button>
                 </RightButtonWrapper>
             </FormWrapper>
         </ContentWrapper>
