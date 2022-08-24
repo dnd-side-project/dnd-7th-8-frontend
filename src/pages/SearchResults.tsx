@@ -49,13 +49,13 @@ const SearchResults = () => {
                         placeItems="center"
                         placeContent="center"
                     >
-                        {foundProducts.length > 0 ? (
+                        {/* {foundProducts.length > 0 ? (
                             foundProducts.map((product) => (
                                 <ProductCard key={product.id} product={product} className="loading-product" />
                             ))
                         ) : (
                             <Text>No products found</Text>
-                        )}
+                        )} */}
                     </Grid>
                 </Box>
             </Container>

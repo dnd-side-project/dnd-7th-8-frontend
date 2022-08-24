@@ -10,15 +10,38 @@ import axios from "axios";
 const ProductCard = loadableVisibility(() => import("./ProductCard"), {
     fallback: <LoadingProduct />,
 });
+
+//들어온 데이터 형식
+interface StateProperties {
+    drink_id: number;
+    drink_name: string;
+    description: string;
+    calorie: number;
+    manufacture: string;
+    price: number;
+    large_category: string;
+    medium_category: string;
+    small_category: string;
+    img: string;
+    alcohol: number;
+    measure: number;
+    caffeine: number;
+}
+
+type Props = {
+    productItems: StateProperties[];
+};
+
 // Give the components chakra props
 const Main = () => {
     const { products, savedItemsCount } = useContext(GlobalContext);
-    const [productItems, setProductItems] = useState([]);
-    let productData;
+    const [productItems, setProductItems] = useState<StateProperties[]>([]);
     useEffect(() => {
         axios.get("http://mazle.ml/drink/get/list/", { withCredentials: true }).then((res) => {
-            console.log(res.data);
-            setProductItems(res.data);
+            const jsondata = JSON.parse(JSON.stringify(res.data));
+            // console.log(jsondata);
+            // console.log(jsondata.data);
+            setProductItems(jsondata.data);
         });
     }, []);
 
@@ -55,12 +78,12 @@ const Main = () => {
             </Flex>
             <Grid
                 p={3}
-                templateColumns="repeat(auto-fit, minmax(240px, 1fr))"
+                templateColumns="repeat(auto-fit, minmax(220px, 1fr))"
                 placeItems="center"
                 placeContent="center"
             >
-                {products?.map((product) => (
-                    <ProductCard key={product.id} product={product} className="loading-product" />
+                {productItems?.map((product) => (
+                    <ProductCard product={product} className="loading-product" />
                 ))}
             </Grid>
         </Box>
