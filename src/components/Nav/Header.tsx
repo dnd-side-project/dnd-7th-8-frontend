@@ -13,16 +13,7 @@ const Header = () => {
     const hamburgerRef = useRef<SVGSVGElement>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
-        <Flex
-            direction="column"
-            height={["120px", "fit-content"]}
-            position="fixed"
-            top={0}
-            w="100%"
-            bg="white"
-            boxShadow="base"
-            style={{ padding: "0% 10%", zIndex: "1" }}
-        >
+        <Flex direction="column" height={["120px", "fit-content"]} w="100%" bg="white" style={{ zIndex: "1" }}>
             <Flex height="65px" px={[null, 2]} py={[7, 9]} justify={["space-between", null]}>
                 <Flex align="center">
                     <HamburgerIcon
@@ -88,7 +79,7 @@ const Header = () => {
                         <Text style={{ marginRight: "20px" }}>|</Text>
                     </HStack>
                     <HStack spacing={[3, 5]}>
-                        <Link as={RouterLink} to="/" _hover={{ textDecoration: "none" }}>
+                        <Link as={RouterLink} to="/signin" _hover={{ textDecoration: "none" }}>
                             <Button
                                 px={5}
                                 fontSize={"sm"}
@@ -101,7 +92,7 @@ const Header = () => {
                                 로그인
                             </Button>
                         </Link>
-                        <Link as={RouterLink} to="/" _hover={{ textDecoration: "none" }}>
+                        <Link as={RouterLink} to="/signup/start" _hover={{ textDecoration: "none" }}>
                             <Button
                                 height={[8, 9]}
                                 minW={[8, 9]}

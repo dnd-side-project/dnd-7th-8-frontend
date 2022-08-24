@@ -1,7 +1,7 @@
 import { Box, Image, Flex, Link, Text, Button, LinkBox, LinkOverlay, useToast } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { BsFillStarFill } from "react-icons/bs";
-import { GlobalContext } from "./context/GlobalState";
+// import { GlobalContext } from "./context/GlobalState";
 import NoFillHeart from "../../assets/images/notFillIcon.png";
 import BsFillHeartFill from "../../assets/images/fillIcon.png";
 import styled from "styled-components";
@@ -19,7 +19,7 @@ interface ProductType {
     large_category: string;
     medium_category: string;
     small_category: string;
-    img: string;
+    img: Blob;
     alcohol: number;
     measure: number;
     caffeine: number;
@@ -27,7 +27,6 @@ interface ProductType {
 
 type Props = {
     product: ProductType;
-    className?: string;
 };
 
 type ModalDataType = {
@@ -38,66 +37,52 @@ type ModalDataType = {
     price: number;
     manufacture: string;
     calorie: number;
-    large_category?: string | null;
-    medium_category?: string | null;
-    small_category?: string | null;
+    large_category: string | null;
+    medium_category: string | null;
+    small_category: string | null;
     alcohol: number;
     caffeine: number;
-    tag?: string | null;
+    tag: string | null;
     like_cnt: number;
 };
 
-const modalData = {
-    drink_name: "칠성사이다",
-    description: "반세기 이상의 역사를 지닌 대한민국 No.1 오리지널 탄산음료",
-    calorie: 145,
-    manufacture: "롯데칠성",
-    price: 1400,
-    large_category: "논알콜",
-    medium_category: "탄산",
-    small_category: "사이다",
-    img: "",
-    alcohol: 0,
-    measure: 330,
-    caffeine: 0,
-    tag: null,
-    like_cnt: 0,
-};
-
-const ProductCard = ({ product }: Props) => {
-    const { addToCart, toggleSaved } = useContext(GlobalContext);
+const HomeCard = ({ product }: Props) => {
     const toast = useToast();
     const [isOpen, setOpen] = useState(false);
-    const [dummyData, setDummyData] = useState<ModalDataType>(modalData);
-
-    const deUrl = window.btoa(product.img);
-    const imgUrl = `data:image/png;base64,${deUrl}`;
+    const [dummyData, setDummyData] = useState<ModalDataType>(modalDummy);
     const handleClick = () => {
         // const token = sessionStorage.getItem("token");
+        const token =
+            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImIxYWExZGQ2LTc1M2YtNDEyMi05NmI3LTZmOTMxMTQ4MzA1ZCIsImV4cCI6MTY2MTI1MjE2M30.kpsClXAEjuv9V82DefoOVkxb5wJ338_HVmc9g1BHY2I";
 
-        //     "Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE5MmEyODBhLWQ5ZGUtNDU4ZS04NGNlLTdiODBiZDFiODhkYyIsImV4cCI6MTY2MTA4MzQ2OX0.2uJr0DZmc09ucKzutV22kCirvoDxhNUF9JFomA4bQWQ";
-        // await axios.get(`http://mazle.ml/drink/get/48`).then((response) => {
-        //     console.log(response);
+        // const httpInstance = axios.create({
+        //     baseURL: "http://mazle.ml",
+        //     timeout: 300,
+        //     headers: {
+        //         "content-type": "application/json;charset=UTF-8",
+        //         credentials: true,
+        //     },
+        //     withCredentials: true,
         // });
-        axios.defaults.withCredentials = true;
-        const token = sessionStorage.getItem("token");
-        const drinkId = product.drink_id;
-        console.log(token);
-        axios
-            .get(`http://mazle.ml/drink/get/${product.drink_id}`, {
-                // params: { i_drink_id: drinkId },
-                headers: { token: `${token}` },
-            })
-            .then((response) => {
-                console.log(response);
-                console.log(response.data);
-            });
+        // httpInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
+        // try {
+        //     httpInstance.get(`/drink/get/50`, { i_drink_id: 50 }).then((response) => {
+        //         console.log(response);
+        //     });
+        // } catch (e) {
+        //     console.log(e);
+        // }
+
         // setDummyData(modalDummy);
         // console.log(dummyData);
         // 여기서 열어준다
         // setOpen(true);
     };
-    const handleModalSubmit = () => setOpen(false);
+
+    const handleModalSubmit = () => {
+        // 모달1 비지니스 로직
+        setOpen(false);
+    };
     const handleModalCancel = () => setOpen(false);
     return (
         <>
@@ -108,7 +93,6 @@ const ProductCard = ({ product }: Props) => {
                 as={LinkBox}
                 style={{ borderRadius: "10px" }}
                 className="product-card"
-                w="200px"
                 h="350px"
                 maxW="240px"
                 transition="all 0.2s ease"
@@ -116,7 +100,6 @@ const ProductCard = ({ product }: Props) => {
                 <Box>
                     <Flex
                         style={{
-                            width: "200px",
                             borderRadius: "10px",
                             backgroundImage:
                                 "linear-gradient(to top, rgba(232, 232, 232, 0.1) 80%, rgba(20, 20, 20, 0.3) 98%)",
@@ -126,8 +109,7 @@ const ProductCard = ({ product }: Props) => {
                         onClick={handleClick}
                     >
                         <Image
-                            src={imgUrl}
-                            // src={"https://image.g9.co.kr/g/1610867103/n?ts=1640412256000"}
+                            src={"https://image.g9.co.kr/g/1610867103/n?ts=1640412256000"}
                             style={{
                                 position: "relative",
                                 height: "300px",
@@ -171,31 +153,12 @@ const ProductCard = ({ product }: Props) => {
                         </Flex>
                     </Flex>
                 </Box>
-                <ProductModal
-                    isOpen={isOpen}
-                    onSubmit={handleModalSubmit}
-                    onCancel={handleModalCancel}
-                    name={dummyData.drink_name}
-                    description={dummyData.description}
-                    calorie={dummyData.calorie}
-                    manufacture={dummyData.manufacture}
-                    price={dummyData.price}
-                    large_category={dummyData.large_category}
-                    medium_category={dummyData.medium_category}
-                    small_category={dummyData.small_category}
-                    img={imgUrl}
-                    alcohol={dummyData.alcohol}
-                    measure={dummyData.measure}
-                    caffeine={dummyData.caffeine}
-                    like_cnt={dummyData.like_cnt}
-                    product={product}
-                />
             </Flex>
         </>
     );
 };
 
-export default ProductCard;
+export default HomeCard;
 
 const CoverContent = styled.div`
     padding: 10px;
