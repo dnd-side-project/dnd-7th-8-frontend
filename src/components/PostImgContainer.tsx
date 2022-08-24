@@ -10,8 +10,8 @@ const ImgContainer = styled.div`
 `;
 
 const RecipeImg = styled.img`
-    width: 384px;
-    height: 384px;
+    width: 200px;
+    height: 450px;
     border-radius: 12px;
 `;
 
@@ -32,7 +32,13 @@ const PostItem = styled.div`
 const PostImgContainer = ({ recipeInfo }: any) => {
     return (
         <ImgContainer>
-            <RecipeImg src={recipeInfo.img !== "" ? recipeInfo : image27} />
+            <RecipeImg
+                src={
+                    recipeInfo.img && recipeInfo.img !== ""
+                        ? `data:image/jpeg;base64,${window.btoa(recipeInfo.img)}`
+                        : image27
+                }
+            />
             <PostInfo>
                 <PostItem>
                     <img src={heart} />

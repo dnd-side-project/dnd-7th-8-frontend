@@ -3,7 +3,8 @@ import axios from "axios";
 const URL = "http://43.200.106.127";
 
 const jwtToken =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYxZGM5MWZkLTBiZDYtNDQ0Mi04N2FiLTA1YzgxNGQxM2U3NyIsImV4cCI6MTY2MTI2Nzg3MH0.-nko7uwdcAbxI49Kv4MPY5BH3iaQCZN6AezctR-Jtws";
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYxZGM5MWZkLTBiZDYtNDQ0Mi04N2FiLTA1YzgxNGQxM2U3NyIsImV4cCI6MTY2MTM1MjM1NH0._R94-VQ57RTBqJrmyqbVOuPoHhHDWZGO2Hu4kO-0ftY";
+
 export const getRecipeList = async (success: any, fail: any) => {
     try {
         const res = await axios.get(`${URL}/recipe/list`, {
@@ -61,11 +62,18 @@ export const registerSubMeterial = async (param: any, success: any, fail: any) =
             headers: {
                 Accept: "application/json",
                 "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${JSON.parse(jwtToken)}`,
+                Authorization: `Token ${jwtToken}`,
+                "X-CSRFToken": "csrftoken",
             },
         };
 
-        const res = await axios.post(`${URL}/recipe/meterial`, { params: param }, config);
+        const formData = new FormData();
+        formData.append("meterial_name", param.meterial_name);
+        const res = await axios.post(`${URL}/recipe/meterial`, formData, {
+            headers: {
+                Authorization: `Bearer ${jwtToken}`,
+            },
+        });
 
         console.log(res);
 
@@ -77,7 +85,13 @@ export const registerSubMeterial = async (param: any, success: any, fail: any) =
 
 export const registerRecipe = async (param: any, success: any, fail: any) => {
     try {
+        console.log(param);
         const formData = new FormData();
+
+        // const blob = new Blob([JSON.stringify(param)], {
+        //     type: "application/json",
+        // });
+
         formData.append(
             "params",
             new Blob([JSON.stringify(param)], {
@@ -85,19 +99,19 @@ export const registerRecipe = async (param: any, success: any, fail: any) => {
             }),
         );
 
-        console.log(formData);
-
         const config = {
             headers: {
                 Accept: "application/json",
                 "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${JSON.parse(jwtToken)}`,
+                Authorization: `Bearer ${jwtToken}`,
             },
         };
 
-        axios.post(`${URL}/recipe/detail`, formData, config);
+        console.log(formData);
 
-        success();
+        const res = await axios.post(`${URL}/recipe/detail`, formData, config);
+
+        success(res);
     } catch {
         fail();
     }

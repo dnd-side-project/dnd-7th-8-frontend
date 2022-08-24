@@ -68,8 +68,9 @@ const RecipeCard = ({ recipe }: any) => {
     return (
         <CardContainer>
             <Link to={`/recipe/${recipe.recipe_id}`} style={{ textDecoration: "none" }}>
-                <CardImg src={recipe.img !== "" && recipe.img ? recipe.img : img27} />
-
+                <CardImg
+                    src={recipe.img && recipe.img !== "" ? `data:image/jpeg;base64,${window.btoa(recipe.img)}` : img27}
+                />
                 <Info>
                     <Name>{recipe.recipe_name}</Name>
                     <HeartWrapper>

@@ -15,7 +15,7 @@ import plus_btn from "../assets/images/plus_btn.png";
 import add_drink from "../assets/images/add_drink.png";
 import drink_ill from "../assets/images/drink_ill.png";
 import { CustomCheckbox } from "../components/FilterItem";
-import { getDrinkList, getSubMeterial, registerSubMeterial } from "../apis/recipe";
+import { getDrinkList, getSubMeterial, registerRecipe, registerSubMeterial } from "../apis/recipe";
 
 const TabBlock = styled(Bar)<{ checked?: boolean }>`
     background: ${(prop) => (prop.checked ? "#fafaf6" : "white")};
@@ -267,7 +267,7 @@ const RecipeRegister = () => {
     });
     const [tag, setTag] = useState<any[]>([]);
     const [isActiveMainSearch, setIsActiveMainSearch] = useState(false);
-    const [searchedMeterial, setSearchedMeterial] = useState([]);
+    const [searchedMeterial, setSearchedMeterial] = useState<any[]>([]);
     const [drinkList, setDrinkList] = useState<any[]>([]); // 추가됨
     const [descriptionInput, setDescriptionInput] = useState(""); // 추가됨
     const [file, setFile] = useState<File>(); // 추가됨
@@ -318,12 +318,22 @@ const RecipeRegister = () => {
     const submitRecipe = () => {
         const param = {
             ...recipeInfo,
-            img: file ? file : null,
             ...resource,
             ...desc,
             tag: tag,
+            img: file ? file : null,
+            sub_meterial: resource.sub_meterial.map((sub) => sub.meterial_id),
         };
-        console.log(param);
+
+        registerRecipe(
+            param,
+            (res: any) => {
+                console.log(res);
+            },
+            () => {
+                alert("문제 발생");
+            },
+        );
     };
 
     return (
@@ -518,11 +528,7 @@ const RecipeRegister = () => {
                                             <img
                                                 src={
                                                     main.img && main.img !== ""
-                                                        ? URL.createObjectURL(
-                                                              new Blob([new ArrayBuffer(main.img)], {
-                                                                  type: "image/png",
-                                                              }),
-                                                          )
+                                                        ? `data:image/jpeg;base64,${window.btoa(main.img)}`
                                                         : drink_ill
                                                 }
                                             />
@@ -546,19 +552,18 @@ const RecipeRegister = () => {
                                             <DrinkCard
                                                 onClick={() => {
                                                     onSetResource({
-                                                        main_meterial: [
-                                                            ...resource.main_meterial,
-                                                            {
-                                                                drink_id: drink.drink_id,
-                                                                drink_name: drink.drink_name,
-                                                                img: drink.img,
-                                                            },
-                                                        ],
+                                                        main_meterial: [...resource.main_meterial, drink.drink_id],
                                                     });
                                                     setIsActiveMainSearch(false);
                                                 }}
                                             >
-                                                <img src={drink_ill} />
+                                                <img
+                                                    src={
+                                                        drink.img && drink.img !== ""
+                                                            ? `data:image/jpeg;base64,${window.btoa(drink.img)}`
+                                                            : drink_ill
+                                                    }
+                                                />
                                                 {drink.drink_name}
                                             </DrinkCard>
                                         ))}
@@ -573,7 +578,7 @@ const RecipeRegister = () => {
                                 {resource.sub_meterial.length > 0 &&
                                     resource.sub_meterial.map((meterial: any) => (
                                         <SmallInputContainer>
-                                            {meterial}
+                                            {meterial.meterial_name}
                                             <InputRightFloat>x</InputRightFloat>
                                         </SmallInputContainer>
                                     ))}
@@ -590,7 +595,8 @@ const RecipeRegister = () => {
                                             getSubMeterial(
                                                 { meterial_name: e.target.value },
                                                 (res: any) => {
-                                                    setSearchedMeterial(res.data.meterial_name);
+                                                    setSearchedMeterial(res.data);
+                                                    console.log(res.data);
                                                 },
                                                 () => {
                                                     console.log("fail");
@@ -612,7 +618,7 @@ const RecipeRegister = () => {
                                                             console.log(res);
                                                         },
                                                         () => {
-                                                            alert("오류가 발생했습니다.");
+                                                            alert("부가 재료 등록 오류가 발생했습니다.");
                                                         },
                                                     );
                                                 }
@@ -626,12 +632,18 @@ const RecipeRegister = () => {
                                                 <div
                                                     onClick={() => {
                                                         onSetResource({
-                                                            sub_meterial: [...resource.sub_meterial, meterial],
+                                                            sub_meterial: [
+                                                                ...resource.sub_meterial,
+                                                                {
+                                                                    meterial_id: meterial.meterial_id,
+                                                                    meterial_name: meterial.meterial_name,
+                                                                },
+                                                            ],
                                                         });
                                                         setSearchedMeterial([]);
                                                     }}
                                                 >
-                                                    {meterial}
+                                                    {meterial.meterial_name}
                                                 </div>
                                             ))}
                                         </FloatingBox>
