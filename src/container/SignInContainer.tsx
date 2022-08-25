@@ -62,16 +62,14 @@ const SignInContainer: React.FC = () => {
             .post(`http://mazle.ml/users/login/`, qs.stringify(data))
             .then((response) => {
                 console.log("response", response);
-                axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
                 sessionStorage.setItem("token", response.data.token);
                 sessionStorage.setItem("isLogin", "1");
                 accessToken = response.data.token;
-                window.location.href = "/";
+                // window.location.href = "/";
             })
             .catch((error) => {
                 console.log("failed", error);
             });
-        axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
         document.cookie = `token=${accessToken}`;
         // axios
         //     .post(`http://mazle.ml/users/login/`, { email: id, passwd: pw })

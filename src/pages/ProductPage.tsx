@@ -51,7 +51,7 @@ function ProductModal(props: any) {
                         <FlexBoxLeft>
                             <DrinkTopContents>
                                 <DrinkName>{props.name}</DrinkName>
-                                <DrinkImg src={sampleImg} alt="sampleImg" />
+                                <DrinkImg src={props.img} alt="sampleImg" />
                                 <DrinkInfo>{props.description}</DrinkInfo>
                             </DrinkTopContents>
                             <DrinkContents>
@@ -103,7 +103,7 @@ function ProductModal(props: any) {
                                     )}
                                 </div>
                             </DrinkTopContents>
-                            <DrinkReviewForm />
+                            <DrinkReviewForm drink_id={props.drink_id} />
                             <ReactionBadge></ReactionBadge>
                         </FlexBoxRight>
                         <div>

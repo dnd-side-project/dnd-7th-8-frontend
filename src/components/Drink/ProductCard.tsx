@@ -90,12 +90,13 @@ const ProductCard = ({ product }: Props) => {
             })
             .then((response) => {
                 console.log(response);
-                console.log(response.data);
+                console.log(response.data.data);
+                setDummyData(response.data.data);
             });
         // setDummyData(modalDummy);
         // console.log(dummyData);
         // 여기서 열어준다
-        // setOpen(true);
+        setOpen(true);
     };
     const handleModalSubmit = () => setOpen(false);
     const handleModalCancel = () => setOpen(false);
@@ -173,6 +174,7 @@ const ProductCard = ({ product }: Props) => {
                 </Box>
                 <ProductModal
                     isOpen={isOpen}
+                    drink_id={product.drink_id}
                     onSubmit={handleModalSubmit}
                     onCancel={handleModalCancel}
                     name={dummyData.drink_name}

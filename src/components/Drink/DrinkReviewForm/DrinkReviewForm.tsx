@@ -1,26 +1,10 @@
-import {
-    Box,
-    Button,
-    chakra,
-    Checkbox,
-    Flex,
-    FormControl,
-    FormErrorMessage,
-    Heading,
-    IconButton,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Link,
-    Text,
-    VStack,
-    Textarea,
-} from "@chakra-ui/react";
+import { Box, Button, chakra, Text, VStack, Textarea } from "@chakra-ui/react";
 import { Formik, Form as FormikForm, FormikHelpers } from "formik";
 import { BiExit } from "react-icons/bi";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useState } from "react";
 import * as Yup from "yup";
+import axios from "axios";
 
 // type Props = {
 //     authType: string;
@@ -37,7 +21,7 @@ const ExitIcon = chakra(BiExit);
 const VisibleEye = chakra(AiFillEye);
 const InvisibleEye = chakra(AiFillEyeInvisible);
 
-const AuthForm = () => {
+const AuthForm = (props: any) => {
     const [value, setValue] = useState("");
 
     const handleInputChange = (e: any) => {
@@ -45,12 +29,36 @@ const AuthForm = () => {
         setValue(inputValue);
     };
 
+    const resisterReview = (e: any) => {
+        const token = sessionStorage.getItem("token");
+        const comment = "정말 맛있지모에요";
+        const score = 5;
+        const data = {
+            comment: comment,
+            score: score,
+        };
+        /* eslint-disable */
+        const qs = require("qs");
+        console.log(token, " / ", comment, " / ", score);
+        const res = axios({
+            headers: {
+                token: `${token}`,
+                withCredentials: true,
+                "Access-Control-Allow-Origin": "http://localhost:3000",
+                Accept: "application/json",
+            },
+            method: "post",
+            url: `http://mazle.ml/drink/review/${props.drink_id}`,
+            data: qs.stringify(data),
+        })
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     // const handleOnClick = () => {};
-
-    const validationSchema = Yup.object({
-        email: Yup.string().email("Invalid email address").required("Required"),
-        password: Yup.string().min(8, "Must be at least 8 characters").required("Required"),
-    });
 
     return (
         <Formik
@@ -62,7 +70,6 @@ const AuthForm = () => {
                     actions.resetForm();
                 }, 2000);
             }}
-            validationSchema={validationSchema}
         >
             {(props) => (
                 <VStack spacing={2}>
@@ -82,6 +89,7 @@ const AuthForm = () => {
                         borderRadius="15"
                         bg="#FFE1E9"
                         _hover={{ backgroundColor: "#FFE1E9" }}
+                        onClick={resisterReview}
                     >
                         <Text flex={6} fontSize={12} color="#BD8593">
                             댓글 등록하기
