@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import img27 from "../assets/images/image27.png";
 import heaert18 from "../assets/images/heart_18.png";
+import { Link } from "react-router-dom";
 
 const CardContainer = styled.div`
     display: flex;
@@ -11,6 +12,10 @@ const CardContainer = styled.div`
     border-radius: 12px;
     border: solid 1px #f5f5f5;
     margin: 12px;
+
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 const CardImg = styled.img`
@@ -27,6 +32,8 @@ const Info = styled.div`
     margin: 12px;
     width: 258px;
     font-size: 16px;
+    text-decoration: none;
+    color: black;
 `;
 
 const TagWrapper = styled.div`
@@ -57,24 +64,26 @@ const Heart = styled.div`
     }
 `;
 
-const RecipeCard = () => {
+const RecipeCard = ({ recipe }: any) => {
     return (
         <CardContainer>
-            <CardImg src={img27} />
-
-            <Info>
-                <Name>레시피 이름</Name>
-                <HeartWrapper>
-                    <TagWrapper>
-                        <Tag>#태그1</Tag>
-                        <Tag>#태그2</Tag>
-                    </TagWrapper>
-                    <Heart>
-                        <img src={heaert18} />
-                        <span>100</span>
-                    </Heart>
-                </HeartWrapper>
-            </Info>
+            <Link to={`/recipe/${recipe.recipe_id}`} style={{ textDecoration: "none" }}>
+                <CardImg
+                    src={recipe.img && recipe.img !== "" ? `data:image/jpeg;base64,${window.btoa(recipe.img)}` : img27}
+                />
+                <Info>
+                    <Name>{recipe.recipe_name}</Name>
+                    <HeartWrapper>
+                        <TagWrapper>
+                            {recipe.tag.length > 0 && recipe.tag.map((tag: any) => <Tag>#{tag}</Tag>)}
+                        </TagWrapper>
+                        <Heart>
+                            <img src={heaert18} />
+                            <span>{recipe.like_cnt}</span>
+                        </Heart>
+                    </HeartWrapper>
+                </Info>
+            </Link>
         </CardContainer>
     );
 };

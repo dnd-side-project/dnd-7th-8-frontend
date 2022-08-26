@@ -1,6 +1,10 @@
 import RecipeCard from "../components/RecipeCard";
 import styled from "styled-components";
 import FilterItem from "../components/FilterItem";
+import { useEffect, useState } from "react";
+import { getRecipeList } from "../apis/recipe";
+import { RightButtonWrapper } from "./RecipeRegister";
+import { Link } from "react-router-dom";
 
 const PageWrapper = styled.div`
     display: flex;
@@ -23,7 +27,30 @@ const RecipeListWrapper = styled.div`
     flex-wrap: wrap;
 `;
 
+const ListHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    h2 {
+        width: 300px;
+    }
+`;
+
 const RecipeList = () => {
+    const [recipeList, setRecipeList] = useState([]);
+
+    useEffect(() => {
+        getRecipeList(
+            (res: any) => {
+                console.log(res.data);
+                setRecipeList(res.data);
+            },
+            () => {
+                alert("fail");
+            },
+        );
+    }, []);
+
     return (
         <PageWrapper>
             <FilterWrapper>
@@ -31,10 +58,20 @@ const RecipeList = () => {
                 <FilterItem />
             </FilterWrapper>
             <ListWrapper>
-                <h2>검색된 조합레시피(55)</h2>
+                <ListHeader>
+                    <div>
+                        <h2>검색된 조합레시피({recipeList.length})</h2>
+                    </div>
+                    <RightButtonWrapper>
+                        <Link to={"/recipe/register"}>
+                            <button>레시피 등록</button>
+                        </Link>
+                    </RightButtonWrapper>
+                </ListHeader>
+
                 <RecipeListWrapper>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                        <RecipeCard key={num} />
+                    {recipeList.map((recipe, index) => (
+                        <RecipeCard recipe={recipe} key={index} />
                     ))}
                 </RecipeListWrapper>
             </ListWrapper>

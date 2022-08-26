@@ -7,20 +7,25 @@ import heart from "../assets/images/heart_18.png";
 const ImgContainer = styled.div`
     display: flex;
     flex-direction: column;
+    width: 40%;
+    align-items: center;
 `;
 
 const RecipeImg = styled.img`
-    width: 384px;
-    height: 384px;
+    width: 200px;
+    /* height: 450px; */
+    max-height: 450px;
     border-radius: 12px;
 `;
 
 const PostInfo = styled.div`
     display: flex;
     flex-direction: row;
+    width: 60%;
     font-size: 12px;
     color: #a8a8a8;
     margin-top: 13px;
+    align-items: flex-start;
 `;
 
 const PostItem = styled.div`
@@ -29,14 +34,20 @@ const PostItem = styled.div`
     align-items: center;
 `;
 
-const PostImgContainer = () => {
+const PostImgContainer = ({ recipeInfo }: any) => {
     return (
         <ImgContainer>
-            <RecipeImg src={image27} />
+            <RecipeImg
+                src={
+                    recipeInfo.img && recipeInfo.img !== ""
+                        ? `data:image/jpeg;base64,${window.btoa(recipeInfo.img)}`
+                        : image27
+                }
+            />
             <PostInfo>
                 <PostItem>
                     <img src={heart} />
-                    100
+                    {recipeInfo.like_cnt}
                 </PostItem>
                 <PostItem>
                     <img src={eye} />

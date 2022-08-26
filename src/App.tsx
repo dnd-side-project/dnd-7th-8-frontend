@@ -20,7 +20,7 @@ import { Provider } from "./components/Drink/context/GlobalState";
 
 const Content = styled.div`
     width: 1240px;
-    margin-bottom: 50px;
+    margin-bottom: 150px;
 `;
 
 function App() {
