@@ -3,6 +3,7 @@ const styles = {
         //   My resets
         "*, *::before, *::after": {
             boxSizing: "border-box",
+            fontFamily: "SUIT-Variable",
         },
         "*": {
             margin: "0",
@@ -13,6 +14,7 @@ const styles = {
         // styles for the `html` and `body`
         "html,body": {
             minWidth: "fit-content",
+            fontFamily: "SUIT-Variable",
         },
         // Shopping Cart Badge styles
         ".MuiBadge-root > span": {

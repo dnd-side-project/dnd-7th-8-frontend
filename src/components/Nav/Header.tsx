@@ -9,7 +9,7 @@ import logoImg from "../../assets/images/logoimg.png";
 // Give the components chakra props
 
 const Header = () => {
-    const location = useLocation();
+    const isLogin = localStorage.getItem("isLogin");
     const hamburgerRef = useRef<SVGSVGElement>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
@@ -48,7 +48,7 @@ const Header = () => {
                                 홈
                             </Button>
                         </Link>
-                        <Link as={RouterLink} to="/" _hover={{ textDecoration: "none" }}>
+                        <Link as={RouterLink} to="/recipe" _hover={{ textDecoration: "none" }}>
                             <Button
                                 pr={1}
                                 fontSize={"sm"}
@@ -78,39 +78,57 @@ const Header = () => {
                         </Link>
                         <Text style={{ marginRight: "20px" }}>|</Text>
                     </HStack>
-                    <HStack spacing={[3, 5]}>
-                        <Link as={RouterLink} to="/signin" _hover={{ textDecoration: "none" }}>
-                            <Button
-                                px={5}
-                                fontSize={"sm"}
-                                color="#000000"
-                                bg="none"
-                                _hover={{
-                                    color: "#FB5C00",
-                                }}
-                            >
-                                로그인
-                            </Button>
-                        </Link>
-                        <Link as={RouterLink} to="/signup/start" _hover={{ textDecoration: "none" }}>
-                            <Button
-                                height={[8, 9]}
-                                minW={[8, 9]}
-                                px={5}
-                                fontSize={"sm"}
-                                variant="outline"
-                                borderColor="#FB5C00"
-                                borderRadius="0.3rem"
-                                color="#FB5C00"
-                                _hover={{
-                                    bg: "#FB5C00",
-                                    color: "white",
-                                }}
-                            >
-                                회원가입
-                            </Button>
-                        </Link>
-                    </HStack>
+                    {isLogin == "1" ? (
+                        <HStack spacing={[3, 5]}>
+                            <Link as={RouterLink} to="/mypage" _hover={{ textDecoration: "none" }}>
+                                <Button
+                                    px={5}
+                                    fontSize={"sm"}
+                                    color="#000000"
+                                    bg="none"
+                                    _hover={{
+                                        color: "#FB5C00",
+                                    }}
+                                >
+                                    마이페이지
+                                </Button>
+                            </Link>
+                        </HStack>
+                    ) : (
+                        <HStack spacing={[3, 5]}>
+                            <Link as={RouterLink} to="/signin" _hover={{ textDecoration: "none" }}>
+                                <Button
+                                    px={5}
+                                    fontSize={"sm"}
+                                    color="#000000"
+                                    bg="none"
+                                    _hover={{
+                                        color: "#FB5C00",
+                                    }}
+                                >
+                                    로그인
+                                </Button>
+                            </Link>
+                            <Link as={RouterLink} to="/signup/start" _hover={{ textDecoration: "none" }}>
+                                <Button
+                                    height={[8, 9]}
+                                    minW={[8, 9]}
+                                    px={5}
+                                    fontSize={"sm"}
+                                    variant="outline"
+                                    borderColor="#FB5C00"
+                                    borderRadius="0.3rem"
+                                    color="#FB5C00"
+                                    _hover={{
+                                        bg: "#FB5C00",
+                                        color: "white",
+                                    }}
+                                >
+                                    회원가입
+                                </Button>
+                            </Link>
+                        </HStack>
+                    )}
                 </Flex>
             </Flex>
             <SearchBar display={["block", "none"]} />

@@ -26,11 +26,8 @@ interface StateProperties {
     alcohol: number;
     measure: number;
     caffeine: number;
+    score: number;
 }
-
-type Props = {
-    productItems: StateProperties[];
-};
 
 // Give the components chakra props
 const Main = () => {

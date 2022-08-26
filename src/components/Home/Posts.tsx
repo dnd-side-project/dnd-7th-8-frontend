@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-// import Modal from './Modal';
 import ReactModal from "react-modal";
-import { Box, Badge, Avatar, Button, Image, Text } from "@chakra-ui/react";
+import { Box, Badge, Avatar, Button, Image, Text, Flex } from "@chakra-ui/react";
 import axios from "axios";
 import { AiFillHeart } from "react-icons/ai";
 import NoFillHeart from "../../assets/images/notFillIcon.png";
@@ -18,23 +17,14 @@ ReactModal.setAppElement("#root");
 
 export default function Posts(props: any) {
     const [isOpen, setOpen] = useState(false);
-    const [isToggle, setIsToggle] = useState(false);
+    const [isToggle, setIsToggle] = useState("0");
+    const [isScrapToggle, setIsScapToggle] = useState("0");
     const [postImgUrl, setPostImgUrl] = useState("");
     const [postContent, setPostContent] = useState("");
-    const sessionStorage = window.sessionStorage;
-
-    const handleModalSubmit = () => {
-        // 모달1 비지니스 로직
-        setOpen(false);
-    };
 
     // const binaryData  =[];
     const deUrl = window.btoa(props.img);
     const imgUrl = `data:image/png;base64,${deUrl}`;
-    // binaryData.push(imgUrl);
-    // const handleModalCancel = () => setOpen(false);
-    // const blobUrl = window.URL.createObjectURL(new Blob(imgUrl, { type: "image/png" }));
-    // console.log(blobUrl);
 
     const imageVariants = {
         beforeHover: {},
@@ -45,9 +35,33 @@ export default function Posts(props: any) {
         onHover: { display: "flex" },
     };
 
+    const handleLike = () => {
+        isToggle == "0"
+            ? sessionStorage.setItem(`likeItem-${props.recipe_id}`, "1")
+            : sessionStorage.setItem(`likeItem-${props.recipe_id}`, "0");
+        isToggle == "0"
+            ? setIsToggle(`${sessionStorage.getItem(`likeItem-${props.recipe_id}`)}`)
+            : setIsToggle(`${sessionStorage.getItem(`likeItem-${props.recipe_id}`)}`);
+    };
+    useEffect(() => {
+        `${sessionStorage.getItem(`likeItem-${props.recipe_id}`)}` == "1" ? setIsToggle("1") : setIsToggle("0");
+        `${sessionStorage.getItem(`scrapItem-${props.recipe_id}`)}` == "1"
+            ? setIsScapToggle("1")
+            : setIsScapToggle("0");
+    });
+
     return (
         <>
-            <Box maxW="282px" h="338px" borderWidth="1px" borderRadius="lg" overflow="hidden" mx="24px" mb={3}>
+            <Box
+                maxW="282px"
+                h="338px"
+                borderWidth="1px"
+                borderRadius="lg"
+                overflow="hidden"
+                mx="24px"
+                mb={3}
+                position="relative"
+            >
                 <ImageWrap>
                     <WrapBox initial="beforeHover" whileHover="onHover">
                         <TextBox variants={textVariants}>
@@ -58,28 +72,33 @@ export default function Posts(props: any) {
                         <ImageBox variants={imageVariants} src={imgUrl} />
                     </WrapBox>
                 </ImageWrap>
-                <Button
-                    leftIcon={isToggle ? <img src={HeartFill} /> : <img src={NoFillHeart} />}
-                    variant={isToggle ? "fill" : "heaa"}
-                    height={7}
-                    minW={7}
-                    fontSize="sm"
-                    onClick={() => {
-                        isToggle ? setIsToggle(false) : setIsToggle(true);
-                        isToggle
-                            ? sessionStorage.setItem("likeItem", props.recipe_id)
-                            : sessionStorage.removeItem("likeItem");
-                    }}
-                    style={{ position: "absolute", top: "34%" }}
-                />
-                <Button
-                    leftIcon={false ? <img src={NoFillCollect} /> : <img src={FillCollect} />}
-                    variant={false ? "fill" : "heaa"}
-                    height={7}
-                    minW={7}
-                    fontSize="sm"
-                    style={{ position: "absolute", top: "28%" }}
-                />
+                <Box display="flex" flexDirection="column" position="absolute" top="50%" left="70%">
+                    <Button
+                        leftIcon={isToggle == "1" ? <img src={HeartFill} /> : <img src={NoFillHeart} />}
+                        variant={isToggle == "1" ? "heartFill" : "heart"}
+                        height={7}
+                        minW={7}
+                        fontSize="sm"
+                        onClick={handleLike}
+                        m={3}
+                    />
+                    <Button
+                        leftIcon={isScrapToggle == "1" ? <img src={FillCollect} /> : <img src={NoFillCollect} />}
+                        variant={isScrapToggle == "1" ? "scapFill" : "heart"}
+                        height={7}
+                        minW={7}
+                        fontSize="sm"
+                        onClick={() => {
+                            `${sessionStorage.getItem(`scrapItem-${props.recipe_id}`)}` == "0"
+                                ? sessionStorage.setItem(`scrapItem-${props.recipe_id}`, "1")
+                                : sessionStorage.setItem(`scrapItem-${props.recipe_id}`, "0");
+                            `${sessionStorage.getItem(`scrapItem-${props.recipe_id}`)}` == "0"
+                                ? setIsToggle(`${sessionStorage.getItem(`scrapItem-${props.recipe_id}`)}`)
+                                : setIsToggle(`${sessionStorage.getItem(`scrapItem-${props.recipe_id}`)}`);
+                        }}
+                    />
+                </Box>
+
                 <Box p="4">
                     <Box fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1}>
                         {props.recipe_name}
@@ -135,7 +154,6 @@ const ImageBox = styled(motion.img)`
 const TextBox = styled(motion.div)`
     color: #fff;
     padding: 1rem;
-
     overflow: hidden;
     position: relative;
     top: -80%;
