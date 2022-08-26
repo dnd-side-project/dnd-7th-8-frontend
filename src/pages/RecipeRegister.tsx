@@ -172,7 +172,7 @@ const GrayButton = styled.button`
     }
 `;
 
-const RightButtonWrapper = styled.div`
+export const RightButtonWrapper = styled.div`
     display: flex;
     width: 100%;
     justify-content: flex-end;
@@ -316,24 +316,25 @@ const RecipeRegister = () => {
     }, []);
 
     const submitRecipe = () => {
-        const param = {
-            ...recipeInfo,
-            ...resource,
-            ...desc,
-            tag: tag,
-            img: file ? file : null,
-            sub_meterial: resource.sub_meterial.map((sub) => sub.meterial_id),
-        };
+        // const param = {
+        //     ...recipeInfo,
+        //     ...resource,
+        //     ...desc,
+        //     tag: tag,
+        //     img: file ? file : null,
+        //     sub_meterial: resource.sub_meterial.map((sub) => sub.meterial_id),
+        // };
 
-        registerRecipe(
-            param,
-            (res: any) => {
-                console.log(res);
-            },
-            () => {
-                alert("문제 발생");
-            },
-        );
+        // registerRecipe(
+        //     param,
+        //     (res: any) => {
+        //         console.log(res);
+        //     },
+        //     () => {
+        //         alert("문제 발생");
+        //     },
+        // );
+        alert("개발 중인 기능입니다. 곧 돌아올게요!");
     };
 
     return (
@@ -552,7 +553,14 @@ const RecipeRegister = () => {
                                             <DrinkCard
                                                 onClick={() => {
                                                     onSetResource({
-                                                        main_meterial: [...resource.main_meterial, drink.drink_id],
+                                                        main_meterial: [
+                                                            ...resource.main_meterial,
+                                                            {
+                                                                img: drink.img,
+                                                                drink_id: drink.drink_id,
+                                                                drink_name: drink.drink_name,
+                                                            },
+                                                        ],
                                                     });
                                                     setIsActiveMainSearch(false);
                                                 }}
