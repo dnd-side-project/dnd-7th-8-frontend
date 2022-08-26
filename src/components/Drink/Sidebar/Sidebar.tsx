@@ -14,7 +14,7 @@ import {
 const Sidebar = () => {
     return (
         <>
-            <Heading as="h4" fontFamily={"SUIT-Variable"} fontSize="lg" fontWeight="bold" ml={2} mb={6} mx={4}>
+            <Heading as="h4" fontFamily={"SUIT-Variable"} fontSize="lg" fontWeight="bold" mb={6} mt={9}>
                 필터
             </Heading>
             <Heading

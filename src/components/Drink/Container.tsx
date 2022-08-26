@@ -11,14 +11,22 @@ type Props = {
 const Container = ({ children }: Props) => {
     return (
         <>
-            <Header />
             <Banner />
-            <Flex direction="column" minH="100vh" style={{ padding: "0% 10%", fontFamily: "SUIT-Variable" }}>
+            <Flex
+                direction="column"
+                minH="100vh"
+                style={{
+                    width: "100%",
+                    marginTop: "20%",
+                    padding: "0% ",
+                    fontFamily: "SUIT-Variable",
+                }}
+            >
                 <Flex flex={1} minH="100%">
-                    <Box display={["none", "block"]} minH="100%" w="220px" py={12} color="gray.600">
+                    <Box display={["none", "block"]} minH="100%" w="220px" color="gray.600">
                         <Sidebar />
                     </Box>
-                    <Box flex={1} py={[0, 8]}>
+                    <Box flex={1} py={[0, 9]}>
                         {children}
                     </Box>
                 </Flex>

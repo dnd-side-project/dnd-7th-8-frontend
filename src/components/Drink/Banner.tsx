@@ -14,7 +14,12 @@ export default Banner;
 
 const DrinkMainContainer = styled.div`
     font-family: "SUIT-Variable";
-    padding: 7% 0% 4% 10%;
+    padding: 2% 0% 4% 17%;
+    position: absolute;
+    width: 100%;
+    height: 160px;
+    left: 0px;
+    top: 70px;
     background-color: #fafaf6;
 `;
 
