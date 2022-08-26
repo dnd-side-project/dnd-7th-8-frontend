@@ -63,37 +63,14 @@ const SignInContainer: React.FC = () => {
             .then((response) => {
                 console.log("response", response);
                 sessionStorage.setItem("token", response.data.token);
-                sessionStorage.setItem("isLogin", "1");
+                localStorage.setItem("isLogin", "1");
                 accessToken = response.data.token;
-                // window.location.href = "/";
+                window.location.href = "/";
             })
             .catch((error) => {
                 console.log("failed", error);
             });
         document.cookie = `token=${accessToken}`;
-        // axios
-        //     .post(`http://mazle.ml/users/login/`, { email: id, passwd: pw })
-        //     .then((response) => {
-        //         alert("로그인에 성공했습니다!");
-        //         console.log(response);
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
-
-        // if (id === User.id && pw === User.pw) {
-        //     alert("로그인에 성공했습니다!");
-        //     sessionStorage.setItem("id", id);
-        //     sessionStorage.setItem("pw", pw);
-
-        //     // setSavedLoginId(sessionStorage.getItem("id"));
-        //     // setSavedLoginPw(sessionStorage.getItem("pw"));
-        //     setSavedLoginId(id);
-        //     setSavedLoginPw(pw);
-        //     window.location.href = "/";
-        // } else {
-        //     alert("등록되지 않은 회원입니다.");
-        // }
     };
 
     useEffect(() => {

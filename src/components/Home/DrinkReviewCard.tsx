@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
+import Rating from "@material-ui/lab/Rating";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import ReactModal from "react-modal";
 import { Box, Badge, Avatar, Button, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
-import { AiFillHeart } from "react-icons/ai";
-import NoFillHeart from "../../assets/images/notFillIcon.png";
-import HeartFill from "../../assets/images/fillIcon.png";
-import NoFillCollect from "../../assets/images/collect_fill.png";
-import FillCollect from "../../assets/images/collect_outline.png";
 // import { modaldata } from './ModalDummyData';
 
 // import MyModal from "./MyModal";
@@ -19,7 +15,7 @@ interface HotReviewState {
     drink_name: string;
     comment: string;
     img: string;
-    like_cnt: number;
+    score: number;
 }
 
 type HotReviewProps = {
@@ -30,8 +26,8 @@ ReactModal.setAppElement("#root");
 
 const DrinkReviewCard = ({ product }: HotReviewProps) => {
     // const binaryData  =[];
-    // const deUrl = window.btoa(props.img);
-    // const imgUrl = `data:image/png;base64,${deUrl}`;
+    const deUrl = window.btoa(product.img);
+    const imgUrl = `data:image/png;base64,${deUrl}`;
     return (
         <>
             <Box
@@ -43,13 +39,16 @@ const DrinkReviewCard = ({ product }: HotReviewProps) => {
                 _hover={{ boxShadow: "0 0 8px 0 #00000063", transition: "box-shadow 0.25s" }}
             >
                 <Box display="flex" alignItems="center">
-                    <img src={product.img} style={{ width: "78px", margin: "10px" }} />
+                    <img src={imgUrl} style={{ width: "78px", margin: "10px" }} />
                     <Box display="flex" alignItems="baseline" flexDirection="column" ml={2}>
                         <Box display="flex">
-                            <AiFillHeart style={{ color: "red", margin: "2px" }} />
-                            <Box mx="2" color="gray.600">
-                                좋아요 {product.like_cnt}
-                            </Box>
+                            <Rating
+                                name="read-only-stars"
+                                value={product.score}
+                                precision={0.1}
+                                size="small"
+                                readOnly
+                            />
                         </Box>
                         <Box fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1}>
                             {product.drink_name}

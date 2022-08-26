@@ -26,6 +26,7 @@ interface StateProperties {
     alcohol: number;
     measure: number;
     caffeine: number;
+    score: number;
 }
 
 // Give the components chakra props

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Tabs, TabList, Grid, Button, Heading } from "@chakra-ui/react";
+import { Box, Flex, Tabs, TabList, Grid, Button, Heading, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import SliderSection from "../components/Home/SliderSection";
@@ -83,11 +83,11 @@ const HomeContainer = () => {
                 <HomeMainTitle>오늘도 맛있는 한 모금, 마즐!</HomeMainTitle>
                 <HomeMainSubTitle>마즐에서 마시는 즐거움을 느껴보세요 :)</HomeMainSubTitle>
             </HomeMainContainer>
-            <HomeContents>
-                <SliderContainer>
-                    <SliderSection recommandItems={bannerSection} />
-                </SliderContainer>
-                <PopularRecipe>
+            <SliderContainer>
+                <SliderSection recommandItems={bannerSection} />
+            </SliderContainer>
+            <VStack spacing="60px">
+                <Box mt={20}>
                     <Box>
                         <Heading mb={5} style={{ fontSize: "28px" }}>
                             지금 뜨는 인기 조합 레시피
@@ -126,15 +126,13 @@ const HomeContainer = () => {
                             </Button>
                         </Link>
                     </Box>
-                </PopularRecipe>
-                <RecommandRecipe>
+                </Box>
+                <Box>
                     <Box>
-                        <Heading mb={5} style={{ fontSize: "28px" }}>
-                            오늘은 이 음료 어떠세요?
-                        </Heading>
+                        <Heading style={{ fontSize: "28px" }}>오늘은 이 음료 어떠세요?</Heading>
                         <CardCarousel />
                     </Box>
-                </RecommandRecipe>
+                </Box>
                 <HotDrinkReview>
                     <Box>
                         <Heading mb={5} style={{ fontSize: "28px" }}>
@@ -143,7 +141,7 @@ const HomeContainer = () => {
                         <RecommendDrink />
                     </Box>
                 </HotDrinkReview>
-            </HomeContents>
+            </VStack>
         </div>
     );
 };
@@ -152,16 +150,12 @@ export default HomeContainer;
 
 const HomeMainContainer = styled.div`
     font-family: "SUIT-Variable";
-    padding: 2% 0% 4% 17%;
-    position: absolute;
-    width: 100%;
+    padding: 2% 0% 4% 29%;
+    width: 1920px;
     height: 160px;
-    left: 0px;
-    top: 70px;
     background-color: #fafaf6;
+    transform: translate(-18%);
 `;
-
-const HomeContents = styled.div``;
 
 const HomeMainTitle = styled.div`
     font-size: 2rem;

@@ -1,27 +1,39 @@
 import Rating from "@material-ui/lab/Rating";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactModal from "react-modal";
 import styled from "styled-components";
+import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import { IoCloseSharp } from "react-icons/io5";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import axios from "axios";
 
 import DrinkReviewForm from "../components/Drink/DrinkReviewForm/DrinkReviewForm";
 import sampleImg from "../assets/images/sampleImg.png";
+import ReviewCard from "../components/Drink/DrinkReviewForm/ReviewCard";
 
 ReactModal.setAppElement("#root");
-
+interface drinkReviewState {
+    nickname: string;
+    comment: string;
+    description: string;
+    score: number;
+    like_cnt: number;
+}
 function ProductModal(props: any) {
-    const [heart, setHeart] = useState(0);
+    const [reviewItems, setReviewItems] = useState<drinkReviewState[]>([]);
 
     const handleClickCancel = () => {
         props.onCancel();
     };
 
-    const handleHeart = () => {
-        if (heart == 0) setHeart(1);
-        else if (heart == 1) setHeart(0);
-    };
+    useEffect(() => {
+        axios.get(`http://mazle.ml/drink/review/${props.drink_id}`, { withCredentials: true }).then((res) => {
+            // const jsondata = JSON.parse(JSON.stringify(res.data));
+            // console.log(jsondata);
+            // console.log(jsondata.data);
+            console.log(res.data.data);
+            setReviewItems(res.data.data);
+        });
+    }, []);
 
     return (
         <ModalStyleContainer>
@@ -51,7 +63,9 @@ function ProductModal(props: any) {
                         <FlexBoxLeft>
                             <DrinkTopContents>
                                 <DrinkName>{props.name}</DrinkName>
-                                <DrinkImg src={props.img} alt="sampleImg" />
+                                <DrinkImg>
+                                    <img src={props.img} />
+                                </DrinkImg>
                                 <DrinkInfo>{props.description}</DrinkInfo>
                             </DrinkTopContents>
                             <DrinkContents>
@@ -77,31 +91,20 @@ function ProductModal(props: any) {
                         <FlexBoxRight>
                             <DrinkTopContents>
                                 <DrinkName>마즐러 리뷰</DrinkName>
-                                <div style={{ display: "flex", margin: "20px 0px" }}>
-                                    <Rating
-                                        name="read-only-stars"
-                                        value={props.product.rating}
-                                        precision={0.1}
-                                        size="small"
-                                        readOnly
+                                <VStack spacing="5px" w="291px">
+                                    <ReviewCard
+                                        drink_id={props.drink_id}
+                                        score="4.5"
+                                        nickname="성은"
+                                        comment="이거 왕 맛있음"
                                     />
-                                    <DrinkInfo>{props.product.rating}</DrinkInfo>
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
-                                    <div>
-                                        <DrinkInfo style={{ fontSize: "12px", fontWeight: "bold", width: "100%" }}>
-                                            닉네임
-                                        </DrinkInfo>
-                                        <DrinkInfo style={{ fontSize: "12px", width: "100%" }}>
-                                            칼로리도 적고 맛있어요!
-                                        </DrinkInfo>
-                                    </div>
-                                    {heart == 0 ? (
-                                        <AiOutlineHeart size={20} color="#fb5c00" onClick={handleHeart} />
-                                    ) : (
-                                        <AiFillHeart size={20} color="#fb5c00" onClick={handleHeart} />
-                                    )}
-                                </div>
+                                    <ReviewCard
+                                        drink_id={props.drink_id}
+                                        score="4.0"
+                                        nickname="다영"
+                                        comment="칠성이 더 쎈 느낌"
+                                    />
+                                </VStack>
                             </DrinkTopContents>
                             <DrinkReviewForm drink_id={props.drink_id} />
                             <ReactionBadge></ReactionBadge>
@@ -126,13 +129,11 @@ const ModalContainer = styled.div`
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0%);
-    z-index: 2;
 `;
 
 const FlexBoxLeft = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     text-align: center;
     height: 100%;
     padding-right: 120px;
@@ -140,7 +141,7 @@ const FlexBoxLeft = styled.div`
 `;
 
 const FlexBoxRight = styled.div`
-    padding: 100px 35px;
+    padding: 100px 50px;
 `;
 
 const DrinkName = styled.div`
@@ -149,24 +150,22 @@ const DrinkName = styled.div`
     margin: 10px 0px;
 `;
 
-const DrinkImg = styled.img`
-    position: relative;
-    left: 10%;
+const DrinkImg = styled.div`
     width: 288px;
     height: 288px;
+    margin-left: 50px;
 `;
-const DrinkInfo = styled.p`
-    width: 375px;
+const DrinkInfo = styled.div`
+    width: 100%;
     font-size: 16px;
     color: #777777;
 `;
 const DrinkTopContents = styled.div`
-    width: 291px;
+    width: 390px;
 `;
 
 const DrinkContents = styled.div`
     display: flex;
-    justify-content: space-around;
     width: 238px;
     height: 180px;
     margin-left: 50px;

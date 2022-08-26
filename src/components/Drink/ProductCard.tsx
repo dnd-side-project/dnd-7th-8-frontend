@@ -23,6 +23,7 @@ interface ProductType {
     alcohol: number;
     measure: number;
     caffeine: number;
+    score: number;
 }
 
 type Props = {
@@ -69,6 +70,7 @@ const ProductCard = ({ product }: Props) => {
     const toast = useToast();
     const [isOpen, setOpen] = useState(false);
     const [dummyData, setDummyData] = useState<ModalDataType>(modalData);
+    const [isLike, setIsLike] = useState(false);
 
     const deUrl = window.btoa(product.img);
     const imgUrl = `data:image/png;base64,${deUrl}`;
@@ -85,12 +87,10 @@ const ProductCard = ({ product }: Props) => {
         console.log(token);
         axios
             .get(`http://mazle.ml/drink/get/${product.drink_id}`, {
-                // params: { i_drink_id: drinkId },
                 headers: { token: `${token}` },
             })
             .then((response) => {
                 console.log(response);
-                console.log(response.data.data);
                 setDummyData(response.data.data);
             });
         // setDummyData(modalDummy);
@@ -144,22 +144,14 @@ const ProductCard = ({ product }: Props) => {
                         </CoverContent>
                     </Flex>
                     <Button
-                        leftIcon={true ? <img src={BsFillHeartFill} /> : <img src={NoFillHeart} />}
-                        variant={true ? "fill" : "heaa"}
+                        leftIcon={isLike ? <img src={BsFillHeartFill} /> : <img src={NoFillHeart} />}
+                        variant={isLike ? "fill" : "heart"}
                         height={7}
                         minW={7}
                         fontSize="sm"
-                        // onClick={() => {
-                        //     toast({
-                        //         title: product.isSaved
-                        //             ? "Product successfully removed from your saved items"
-                        //             : "Product successfully added to your saved items",
-                        //         status: "success",
-                        //         duration: 1500,
-                        //         isClosable: true,
-                        //     });
-                        //     toggleSaved(product.id);
-                        // }}
+                        onClick={() => {
+                            isLike ? setIsLike(false) : setIsLike(true);
+                        }}
                         style={{ position: "absolute", left: "80%", bottom: "20%" }}
                     />
                     <Flex mt={2} align="center" justify="space-between" flexWrap="wrap">
@@ -167,7 +159,7 @@ const ProductCard = ({ product }: Props) => {
                             {/* <Rating name="read-only-stars" precision={0.1} size="small" readOnly /> */}
                             <BsFillStarFill style={{ width: "15px", color: "#FB5C00" }} />
                             <Text ml={1} fontSize="md" style={{ fontWeight: "900", color: "#FB5C00" }}>
-                                4.8
+                                {product.score.toFixed(1)}
                             </Text>
                         </Flex>
                     </Flex>

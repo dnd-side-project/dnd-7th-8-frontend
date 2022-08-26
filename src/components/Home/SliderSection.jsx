@@ -12,7 +12,6 @@ const Container = styled.div`
 Container.displayName = "Container";
 
 const Slide = styled.div`
-    position: relative;
     user-select: none;
     height: 100%;
 `;
@@ -102,11 +101,11 @@ const Indicators = ({ position, childrenLength }) => {
 
 const ArrowsContainer = styled.div`
     position: absolute;
-    z-index: 5;
-    right: 0;
-    top: calc(50% - 10px);
+    z-index: 3;
+
+    top: 40%;
     bottom: 0;
-    left: 280px;
+    left: 287px;
 
     display: flex;
     justify-content: space-between;
@@ -266,7 +265,7 @@ const CarouselItem = styled.img`
     display: block;
     object-fit: cover;
     height: 332px;
-    width: 1200px;
+    width: 1220px;
     margin: auto;
     border-radius: 15px;
 `;

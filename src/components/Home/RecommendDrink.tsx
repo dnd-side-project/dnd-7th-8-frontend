@@ -2,29 +2,30 @@ import React, { useState, useEffect } from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Image, Grid } from "@chakra-ui/react";
 import axios from "axios";
 import DrinkReviewCard from "./DrinkReviewCard";
-import { reviewList, badReviewList } from "./HomeDataDummy";
+import { badReviewList } from "./HomeDataDummy";
 
 interface ReviewState {
     comment_id: number;
     drink_name: string;
     comment: string;
     img: string;
-    like_cnt: number;
+    score: number;
 }
 
 const RecommendDrink = () => {
-    const [hotReviewList, setHotReviewList] = useState<ReviewState[]>(reviewList);
+    const [hotReviewList, setHotReviewList] = useState<ReviewState[]>([]);
     const [badReview, setBadReview] = useState<ReviewState[]>(badReviewList);
-    // useEffect(() => {
-    //     axios
-    //         .get("http://mazle.ml/home/hot-review/")
-    //         .then((res) => {
-    //             console.log(res.data.data);
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         });
-    // });
+
+    useEffect(() => {
+        axios
+            .get("http://mazle.ml/home/hot-review/")
+            .then((res) => {
+                setHotReviewList(res.data.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
 
     return (
         <Tabs defaultIndex={0} variant="enclosed">
@@ -68,13 +69,13 @@ const RecommendDrink = () => {
                         placeItems="center"
                         placeContent="center"
                     >
-                        {reviewList?.map((product) => (
+                        {hotReviewList.map((product) => (
                             <DrinkReviewCard product={product} />
                         ))}
                     </Grid>
                 </TabPanel>
                 <TabPanel>
-                    <Grid
+                    {/* <Grid
                         p={3}
                         templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
                         placeItems="center"
@@ -83,7 +84,7 @@ const RecommendDrink = () => {
                         {badReviewList?.map((product) => (
                             <DrinkReviewCard product={product} />
                         ))}
-                    </Grid>
+                    </Grid> */}
                 </TabPanel>
             </TabPanels>
         </Tabs>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import Carousel from "react-grid-carousel";
@@ -19,14 +19,6 @@ const MyDot = ({ isActive }) => (
     ></span>
 );
 
-const imgDummy = [
-    "https://img.insight.co.kr/static/2018/07/07/700/a833116phtwp951v6ec2.jpg",
-    "https://blog.kakaocdn.net/dn/tQDAf/btqF8wkCKgH/S56kD9s3CYkGrEPhOPSuCK/img.jpg",
-    "https://blog.kakaocdn.net/dn/cGdk26/btqF9DpQNik/dCTPS7BmADToQXe6BLKD6k/img.jpg",
-    "https://cdn.cashfeed.co.kr/attachments/b72514a105.jpg",
-    "https://img.insight.co.kr/static/2018/07/07/700/428938b600ky9w75pj28.jpg",
-];
-
 const imgArray = [];
 export default function CardCarousel() {
     const [recommandData, setRecommandData] = useState([]);
@@ -35,14 +27,14 @@ export default function CardCarousel() {
     // const imgUrl = `data:image/png;base64,${deUrl}`;
     let deUrl;
     useEffect(() => {
-        axios.get(`http://mazle.ml/home/recipe-type/`).then((res) => {
-            // console.log(res.data.data);
+        axios.get(`http://mazle.ml/home/hot-drink/`).then((res) => {
+            console.log(res.data.data);
             setRecommandData(res.data.data);
+            for (let i = 0; i < recommandData.length; i++) {
+                deUrl = window.btoa(recommandData[i].img);
+                imgArray[i] = `data:image/png;base64,${deUrl}`;
+            }
         });
-        for (let i = 0; i < recommandData.length; i++) {
-            deUrl = window.btoa(recommandData[i].img);
-            imgArray[i] = `data:image/png;base64,${deUrl}`;
-        }
     }, []);
     return (
         <Container>
@@ -61,21 +53,21 @@ export default function CardCarousel() {
                                 cols: 3,
                             },
                             {
-                                breakpoint: 990,
+                                breakpoint: 1200,
                                 cols: 3,
                             },
                         ]}
-                        mobileBreakpoint={670}
                         arrowRight={<ArrowBtn type="right" />}
                         arrowLeft={<ArrowBtn type="left" />}
                     >
                         {recommandData.map((item, i) => (
                             <Carousel.Item key={i}>
                                 <Card>
-                                    <TextBox>{item.recipe_name}</TextBox>
+                                    <TextBox>{item.drink_name}</TextBox>
                                     <Img img={imgArray[i]} />
 
-                                    <Star>★ {item.total_score.toFixed(1)}</Star>
+                                    <Star>♥ {item.like_cnt}</Star>
+                                    {/* <Text>좋아요</Text> */}
                                 </Card>
                             </Carousel.Item>
                         ))}
@@ -87,9 +79,6 @@ export default function CardCarousel() {
 }
 
 const Container = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
     min-height: 100%;
 `;
 
@@ -130,6 +119,7 @@ const ArrowBtn = styled.span`
     }
 `;
 const TextBox = styled.div`
+    width: 180px;
     color: white;
     position: absolute;
     top: 0;
@@ -186,4 +176,5 @@ const Star = styled.div`
     margin: 10px 10px;
     color: #fb5c00;
     font-size: 18px;
+    font-weight: bold;
 `;

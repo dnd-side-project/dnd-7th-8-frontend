@@ -25,27 +25,28 @@ const Content = styled.div`
 
 function App() {
     return (
-        <Content>
-            <BrowserRouter>
-                <Provider>
-                    <ChakraProvider theme={theme}>
-                        <Header />
-                        <Routes>
-                            <Route path="/signin" element={<SignIn />} />
-                            <Route path="/signup/start" element={<SignUpStart />} />
-                            <Route path="/signup" element={<SignUp />} />
-
-                            <Route path="/" element={<Home />} />
-                            <Route path="/recipe" element={<RecipeList />} />
-                            <Route path="/recipe/*" element={<RecipeDetail />} />
-                            <Route path="/recipe/register" element={<RecipeRegister />} />
-                            <Route path="/drink" element={<Drink />} />
-                            <Route path="/search/:name" element={<SearchResults />} />
-                        </Routes>
-                    </ChakraProvider>
-                </Provider>
-            </BrowserRouter>
-        </Content>
+        <BrowserRouter>
+            <Provider>
+                <ChakraProvider theme={theme}>
+                    <Header />
+                    <Routes>
+                        <Route path="/signin" element={<SignIn />} />
+                        <Route path="/signup/start" element={<SignUpStart />} />
+                        <Route path="/signup" element={<SignUp />} />
+                        <Route path="/" element={<Home />} />
+                        <Route path="/drink" element={<Drink />} />
+                        <Route path="/search/:name" element={<SearchResults />} />
+                    </Routes>
+                </ChakraProvider>
+            </Provider>
+            <Content>
+                <Routes>
+                    <Route path="/recipe" element={<RecipeList />} />
+                    <Route path="/recipe/*" element={<RecipeDetail />} />
+                    <Route path="/recipe/register" element={<RecipeRegister />} />
+                </Routes>
+            </Content>
+        </BrowserRouter>
     );
 }
 
