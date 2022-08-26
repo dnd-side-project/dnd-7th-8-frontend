@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-// import Modal from './Modal';
 import ReactModal from "react-modal";
 import { Box, Badge, Avatar, Button, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -23,18 +22,9 @@ export default function Posts(props: any) {
     const [postContent, setPostContent] = useState("");
     const sessionStorage = window.sessionStorage;
 
-    const handleModalSubmit = () => {
-        // 모달1 비지니스 로직
-        setOpen(false);
-    };
-
     // const binaryData  =[];
     const deUrl = window.btoa(props.img);
     const imgUrl = `data:image/png;base64,${deUrl}`;
-    // binaryData.push(imgUrl);
-    // const handleModalCancel = () => setOpen(false);
-    // const blobUrl = window.URL.createObjectURL(new Blob(imgUrl, { type: "image/png" }));
-    // console.log(blobUrl);
 
     const imageVariants = {
         beforeHover: {},
@@ -135,7 +125,6 @@ const ImageBox = styled(motion.img)`
 const TextBox = styled(motion.div)`
     color: #fff;
     padding: 1rem;
-
     overflow: hidden;
     position: relative;
     top: -80%;

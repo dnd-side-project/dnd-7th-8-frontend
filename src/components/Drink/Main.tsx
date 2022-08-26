@@ -28,10 +28,6 @@ interface StateProperties {
     caffeine: number;
 }
 
-type Props = {
-    productItems: StateProperties[];
-};
-
 // Give the components chakra props
 const Main = () => {
     const { products, savedItemsCount } = useContext(GlobalContext);

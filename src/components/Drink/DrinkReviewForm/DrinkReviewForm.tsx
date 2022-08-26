@@ -16,10 +16,6 @@ interface Values {
 }
 
 // Give the components chakra props
-const Form = chakra(FormikForm);
-const ExitIcon = chakra(BiExit);
-const VisibleEye = chakra(AiFillEye);
-const InvisibleEye = chakra(AiFillEyeInvisible);
 
 const AuthForm = (props: any) => {
     const [value, setValue] = useState("");
@@ -39,7 +35,7 @@ const AuthForm = (props: any) => {
         };
         /* eslint-disable */
         const qs = require("qs");
-        console.log(token, " / ", comment, " / ", score);
+
         const res = axios({
             headers: {
                 token: `${token}`,
@@ -58,6 +54,7 @@ const AuthForm = (props: any) => {
                 console.log(err);
             });
     };
+
     // const handleOnClick = () => {};
 
     return (
