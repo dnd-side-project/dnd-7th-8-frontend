@@ -38,7 +38,7 @@ const ListHeader = styled.div`
 
 const RecipeList = () => {
     const [recipeList, setRecipeList] = useState([]);
-
+    const isLogin = localStorage.getItem("isLogin");
     useEffect(() => {
         getRecipeList(
             (res: any) => {
@@ -51,6 +51,9 @@ const RecipeList = () => {
         );
     }, []);
 
+    const handleError = () => {
+        alert("로그인 시 사용 가능한 서비스입니다.");
+    };
     return (
         <PageWrapper>
             <FilterWrapper>
@@ -63,9 +66,15 @@ const RecipeList = () => {
                         <h2>검색된 조합레시피({recipeList.length})</h2>
                     </div>
                     <RightButtonWrapper>
-                        <Link to={"/recipe/register"}>
-                            <button>레시피 등록</button>
-                        </Link>
+                        {isLogin ? (
+                            <Link to={"/recipe/register"}>
+                                <button>레시피 등록</button>
+                            </Link>
+                        ) : (
+                            <Link to={"/signin"}>
+                                <button onClick={handleError}>레시피 등록</button>
+                            </Link>
+                        )}
                     </RightButtonWrapper>
                 </ListHeader>
 

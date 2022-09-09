@@ -21,7 +21,6 @@ const SearchBar = ({ display }: Props) => {
     return (
         <Form display={display} onSubmit={handleSubmit} w={["full", "sm"]} m="0 auto">
             <InputGroup>
-                <InputLeftElement pointerEvents="none" children={<SearchIcon color="gray.600" />} />
                 <Input
                     borderRadius="full"
                     bg="blackAlpha.200"

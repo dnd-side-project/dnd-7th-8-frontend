@@ -34,7 +34,7 @@ const Main = () => {
     const { products, savedItemsCount } = useContext(GlobalContext);
     const [productItems, setProductItems] = useState<StateProperties[]>([]);
     useEffect(() => {
-        axios.get("http://mazle.ml/drink/get/list/", { withCredentials: true }).then((res) => {
+        axios.get("http://13.125.182.32/drink/get/list/", { withCredentials: true }).then((res) => {
             const jsondata = JSON.parse(JSON.stringify(res.data));
             // console.log(jsondata);
             // console.log(jsondata.data);

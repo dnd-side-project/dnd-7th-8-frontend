@@ -17,6 +17,7 @@ import SearchResults from "./pages/SearchResults";
 
 //테스트용
 import { Provider } from "./components/Drink/context/GlobalState";
+import MyPage from "./pages/MyPage";
 
 const Content = styled.div`
     width: 1240px;
@@ -36,6 +37,7 @@ function App() {
                         <Route path="/" element={<Home />} />
                         <Route path="/drink" element={<Drink />} />
                         <Route path="/search/:name" element={<SearchResults />} />
+                        <Route path="/mypage" element={<MyPage />} />
                     </Routes>
                 </ChakraProvider>
             </Provider>

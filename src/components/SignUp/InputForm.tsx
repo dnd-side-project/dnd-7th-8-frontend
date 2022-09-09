@@ -73,7 +73,7 @@ function InputForm() {
                 sessionStorage.setItem("token", res.data.token);
                 sessionStorage.setItem("isLogin", "1");
                 alert("회원가입이 완료되었습니다!");
-                // navigate("/");
+                navigate("/signin");
             })
             .catch((err) => {
                 console.log(err);

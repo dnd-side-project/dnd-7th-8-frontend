@@ -28,7 +28,6 @@ export default function CardCarousel() {
     let deUrl;
     useEffect(() => {
         axios.get(`http://mazle.ml/home/hot-drink/`).then((res) => {
-            console.log(res.data.data);
             setRecommandData(res.data.data);
             for (let i = 0; i < recommandData.length; i++) {
                 deUrl = window.btoa(recommandData[i].img);

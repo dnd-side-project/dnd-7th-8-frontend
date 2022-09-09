@@ -12,19 +12,17 @@ const Header = () => {
     const isLogin = localStorage.getItem("isLogin");
     const hamburgerRef = useRef<SVGSVGElement>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const handleLogout = () => {
+        localStorage.removeItem("isLogin");
+        sessionStorage.clear();
+        window.location.href = "/";
+    };
+
     return (
         <Flex direction="column" height={["120px", "fit-content"]} w="100%" bg="white" style={{ zIndex: "1" }}>
             <Flex height="65px" px={[null, 2]} py={[7, 9]} justify={["space-between", null]}>
                 <Flex align="center">
-                    <HamburgerIcon
-                        display={["inline-block", "none"]}
-                        w="1.5rem"
-                        h="1.5rem"
-                        mr={4}
-                        cursor="pointer"
-                        ref={hamburgerRef}
-                        onClick={onOpen}
-                    />
                     <Link as={RouterLink} to="/" _hover={{ textDecoration: "none" }} mr={4}>
                         <Heading w="5rem">
                             <img src={logoImg} />
@@ -93,6 +91,18 @@ const Header = () => {
                                     마이페이지
                                 </Button>
                             </Link>
+                            <Button
+                                px={5}
+                                fontSize={"sm"}
+                                color="#000000"
+                                bg="none"
+                                _hover={{
+                                    color: "#FB5C00",
+                                }}
+                                onClick={handleLogout}
+                            >
+                                로그아웃
+                            </Button>
                         </HStack>
                     ) : (
                         <HStack spacing={[3, 5]}>
